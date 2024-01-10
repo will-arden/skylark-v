@@ -16,7 +16,7 @@ module datapath(
     input logic [2:0]           ALUFuncE,               // Controls the ALU's operation                 (Execute)
     
     // Outputs to external devices
-    output logic [31:0]         ALUResult, WriteData, PCF,
+    output logic [31:0]         ALUResult, WD, PCF,
     
     // Outputs to internal devices (to control)
     output logic                zero
@@ -26,10 +26,6 @@ module datapath(
     // Internal signals associated with Extend Unit
     logic [31:7] bits_in;
     logic [31:0] ExtImmD;
-
-    // -------------- LOAD/STORE -------------- //
-    
-    assign WriteData = 32'h00000000;
 
     // -------------- PROGRAM COUNTER -------------- //
 
@@ -52,11 +48,12 @@ module datapath(
     assign A1 = InstrF[19:15];                  // rs1
     assign A2 = InstrF[24:20];                  // rs2
     assign A3 = InstrF[11:7];                   // rd
-    assign A4 = 32'h00000000;       // FOR NOW, IGNORE WRITEBACK REGISTER
+    assign A4 = InstrF[11:7];                   // rd for Writeback (same for now, because there is no pipelining)
     
     logic [31:0] ExResultE;
     assign ExResultE = ALUResult;       // FOR NOW, JUST SET THIS TO ALURESULT - later this should be either that or BNN result
     assign WD3 = ExResultE;
+    assign WD4 = ReadData;
     
     register_file rf(
         clk,
@@ -93,5 +90,10 @@ module datapath(
         bits_in,
         ExtImmD
     );
+    
+    // -------------- DATA MEMORY -------------- //
+    
+    assign WD = RD2;                                // WriteData is output to the external data memory.
+                                                    // This is handled in the layer above (top level).
 
 endmodule

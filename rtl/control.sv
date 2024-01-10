@@ -34,12 +34,12 @@ module control(
         endcase
         
         case(funct3)
-            3'b000:         control_signals[3:1] = 3'b000;      // ADD/SUB operation (2's complement means it does not matter)
-            3'b010:         control_signals[3:1] = 3'b001;      // SLT operation
-            3'b100:         control_signals[3:1] = 3'b100;      // XOR operation
-            3'b110:         control_signals[3:1] = 3'b011;      // OR operation
-            3'b111:         control_signals[3:1] = 3'b010;      // AND operation
-            default:        control_signals[3:1] = 'x;          // Invalid operation
+            3'b000:         control_signals[3:1] = (funct7b5 && op==7'b0110011) ? 3'b001 : 3'b000;    // ADD/SUB operation
+            3'b010:         control_signals[3:1] = 3'b001;                          // SLT operation
+            3'b100:         control_signals[3:1] = 3'b100;                          // XOR operation
+            3'b110:         control_signals[3:1] = 3'b011;                          // OR operation
+            3'b111:         control_signals[3:1] = 3'b010;                          // AND operation
+            default:        control_signals[3:1] = 'x;                              // Invalid operation
         endcase
         
     end
