@@ -1,6 +1,7 @@
 `timescale 1ns/1ps
 
 `define IMEM_SIZE 16
+`define DMEM_SIZE 64
 
 module tb_top_level;
 
@@ -26,21 +27,32 @@ module tb_top_level;
         PCF
     );
     
-// -------------- INSTRUCTION MEMORY --------------
+// -------------- INSTRUCTION MEMORY -------------- //
 
     imem #(`IMEM_SIZE, "C:/Users/willa/RISCV_core/user_data/imem.dat") imem(
         PCF,
         InstrF
     );
     
-// -------------- SIMULATION --------------
+// -------------- DATA MEMORY -------------- //
+
+    logic [31:0]        WriteAddr;
+
+    dmem #(`DMEM_SIZE) dmem(
+        clk, reset,
+        MemWrite,
+        WriteAddr,
+        WriteData,
+        ReadData
+    );
+    
+// -------------- SIMULATION -------------- //
 
     initial begin
     
         // Initialize core inputs
         clk = 1'b0;
-        //InstrF = 32'h00000000;
-        ReadData = 32'h00000000;
+        WriteAddr = 32'h00000000;
         
         // Reset device by toggling reset signal
         reset <= 1'b1;
