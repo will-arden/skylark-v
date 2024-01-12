@@ -12,7 +12,7 @@ A link to the project planning interface (Notion) can be found [here.](https://b
 * 3:1 multiplexer added to select the output from the Execute stage (selecting using `ExPathE`)
 * `BEQ` is partially implemented, in that it behaves identically to a `JAL` instruction.
 
-### To-do:
+### To-do
 * Fully implement `BEQ` instruction
 * Implement other B-type instructions
 * Add pipeline registers and hazard control unit
