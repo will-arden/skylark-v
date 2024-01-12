@@ -10,9 +10,9 @@ module datapath(
     input logic                 RegWE_E,                // Register Write Enable                        (Execute)
                                 RegWE_W,                //                                              (Writeback)
                                 OpBSrcE,                // Select ALU operand B source                  (Execute)
-                                ExPathE,                // Select desired Execute stage path            (Execute)
                                 PCSrcE,                 // Selects branch target address or +4          (Execute)
-    input logic [1:0]           ImmFormatD,             // Format of immediate value for Extend Unit    (Decode)
+    input logic [1:0]           ExPathE,                // Select desired Execute stage path            (Execute)
+                                ImmFormatD,             // Format of immediate value for Extend Unit    (Decode)
     input logic [2:0]           ALUFuncE,               // Controls the ALU's operation                 (Execute)
     
     // Outputs to external devices
@@ -23,20 +23,32 @@ module datapath(
 
 );
 
+    // Program counter signals
+    logic [31:0] PCNextF, PCNextE;
+
     // Internal signals associated with Extend Unit
     logic [31:7] bits_in;
     logic [31:0] ExtImmD;
+    
+    // Address Generation Unit signals
+    logic [31:0] PCE, TargetAddr;
+    
+    // BNN signals
+    logic [31:0] BNNResult;
+    assign BNNResult = 32'h00000000;
 
     // -------------- PROGRAM COUNTER -------------- //
 
-    always_ff @(posedge reset, posedge clk) begin
-        
-        if (reset == 1'b1)
-            PCF <= 32'h00000000;                        // PC is zero upon reset
-        else if (clk == 1'b1 && reset == 1'b0)
-            PCF <= PCF + 32'h00000004;                  // PC is incremented upon every rising clock edge
-            
-    end
+    pc pc(
+        clk,
+        reset,
+        PCSrcE,
+        TargetAddr,
+        PCF,
+        PCNextF
+    );
+    
+    assign PCNextE = PCNextF;
     
     // -------------- REGISTER FILE -------------- //
     
@@ -50,12 +62,22 @@ module datapath(
     assign A3 = InstrF[11:7];                   // rd
     assign A4 = InstrF[11:7];                   // rd for Writeback (same for now, because there is no pipelining)
     
+    
+    // Choose result from Execute stage
     logic [31:0] ExResultE;
-    assign ExResultE = ALUResult;       // FOR NOW, JUST SET THIS TO ALURESULT - later this should be either that or BNN result
+    
+    mux3to1 path_select(
+        ALUResult,                              // ALU path result
+        32'h00000000,                           // BNN path result (FOR NOW, THIS IS ZERO)
+        PCF + 32'h00000004,                     // JAL path result
+        ExPathE,                                // 2-bit signal selects between the above options
+        ExResultE                               // Selected value, to be written to register file
+    );
+    
     assign WD3 = ExResultE;
     assign WD4 = ReadData;
     
-    register_file rf(
+    register_file register_file(
         clk,
         reset,
         RegWE_E,
@@ -81,6 +103,14 @@ module datapath(
         zero
     );
     
+    /*mux3to1 path_mux(
+        ALUResult,
+        BNNResult,
+        PCNextE,
+        ExPathE,
+        ExResultE
+    );*/
+    
     // -------------- EXTEND UNIT -------------- //
     
     assign bits_in = InstrF[31:7];
@@ -89,6 +119,16 @@ module datapath(
         ImmFormatD,
         bits_in,
         ExtImmD
+    );
+    
+    // -------------- ADDRESS GENERATION UNIT -------------- //
+    
+    assign PCE = PCF;
+    
+    agu agu(
+        ExtImmE,
+        PCE,
+        TargetAddr
     );
     
     // -------------- DATA MEMORY -------------- //
