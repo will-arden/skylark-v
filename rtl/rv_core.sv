@@ -18,8 +18,8 @@ module rv_core(
     // -------------- DATAPATH -------------- //
     
     // Internal signals for datapath module (explained within module)
-    logic           RegWE_E, RegWE_W, OpBSrcE, ExPathE, PCSrcE, zero;
-    logic [1:0]     ImmFormatD;
+    logic           RegWE_E, RegWE_W, OpBSrcE, PCSrcE, zero;
+    logic [1:0]     ExPathE, ImmFormatD;
     logic [2:0]     ALUFuncE;
     
     // Instantiate the datapath
@@ -31,8 +31,8 @@ module rv_core(
         RegWE_E,                        // Internal inputs (from control)
         RegWE_W,
         OpBSrcE,
-        ExPathE,
         PCSrcE,
+        ExPathE,
         ImmFormatD,
         ALUFuncE,
         ALUResult,                      // External outputs
@@ -59,8 +59,8 @@ module rv_core(
         RegWE_E,                         // Outputs to internal destinations (to datapath)
         RegWE_W,
         OpBSrcE,
-        ExPathE,
         PCSrcE,
+        ExPathE,
         ImmFormatD,
         ALUFuncE,
         MemWrite                        // Outputs to external destinations
