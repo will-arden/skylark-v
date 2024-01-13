@@ -4,7 +4,7 @@ A link to the project planning interface (Notion) can be found [here.](https://b
 
 ![Block_Diagram](https://github.com/will-arden/risc-v-core/blob/main/doc/block_diagram?raw=true)
 
-### Changelog
+### Changelog (v0.3.1)
 * Tidied-up register_file.sv
 * Register values become `0x0` on reset, and register `x0` is hard-wired to `0x0`
 * ALU subtraction bug fixed
