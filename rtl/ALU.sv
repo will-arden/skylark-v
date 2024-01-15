@@ -36,6 +36,6 @@ module ALU (
     
     // Assign flags based on result
     assign zero = (result == 32'h00000000) ? 1'b1 : 1'b0;       // Zero
-    assign negative = (result < 32'h00000000) ? 1'b1 : 1'b0;    // Negative
+    assign negative = result[31];                               // Negative
 
 endmodule

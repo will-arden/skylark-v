@@ -60,6 +60,8 @@ module control(
             unique case (funct3)
                 3'b000:         condition_met = zero;               // BEQ
                 3'b001:         condition_met = !zero;              // BNE
+                3'b100:         condition_met = negative;           // BLT
+                3'b101:         condition_met = !negative;          // BGE
                 default:        condition_met = 1'bx;               // Invalid/unsupported instruction
             endcase
         end
