@@ -1,0 +1,16 @@
+init:
+    nop
+    nop
+    addi x1, x0, 1	; Initialize term n-1
+    addi x2, x0, 1	; Initialize term n-2
+    addi x3, x0, 1	; Initialize the counter
+    addi x4, x0, 20	; Set the number of terms of the Fibonacci sequence
+loop:
+    add x5, x1, x2	; Sum the previous two terms, saving the result in r5
+    addi x2, x1, 0	; Move the n-1 term into the n-2 term for the next loop
+    addi x1, x5, 0	; Move the result into the n-1 term for the next loop
+    addi x3, x3, 1	; Increment the loop counter
+    beq x3, x4, finish	; If finished, do not repeat the loop
+    jal x10, loop	; Otherwise, repeat the loop
+finish:
+	sw x5, 0(x0)	; Store the result at 0x0 in data memory
