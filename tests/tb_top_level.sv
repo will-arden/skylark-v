@@ -1,6 +1,7 @@
 `timescale 1ns/1ps
 
-`define IMEM_SIZE 16
+`define IMEM_PATH "C:/Users/willa/RISCV_core/user_data/fibonacci.dat"
+`define IMEM_SIZE 32
 `define DMEM_SIZE 64
 
 module tb_top_level;
@@ -29,7 +30,7 @@ module tb_top_level;
     
 // -------------- INSTRUCTION MEMORY -------------- //
 
-    imem #(`IMEM_SIZE, "C:/Users/willa/RISCV_core/user_data/imem.dat") imem(
+    imem #(`IMEM_SIZE, `IMEM_PATH) imem(
         PCF,
         InstrF
     );
