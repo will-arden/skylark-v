@@ -1,6 +1,6 @@
 `timescale 1ns/1ps
 
-`define IMEM_PATH "C:/Users/willa/RISCV_core/user_data/fibonacci.dat"
+`define IMEM_PATH "C:/Users/willa/RISCV_core/user_data/branch_instructions.dat"
 `define IMEM_SIZE 32
 `define DMEM_SIZE 64
 
