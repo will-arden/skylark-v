@@ -19,7 +19,8 @@ module datapath(
     output logic [31:0]         ALUResult, WD, PCF,
     
     // Outputs to internal devices (to control)
-    output logic                zero
+    output logic                zero,
+                                negative
 
 );
 
@@ -100,7 +101,8 @@ module datapath(
         ALUFuncE,
         OpBSrcE,
         ALUResult,
-        zero
+        zero,
+        negative
     );
     
     /*mux3to1 path_mux(

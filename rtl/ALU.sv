@@ -7,7 +7,8 @@ module ALU (
     input logic             OpBSrcE,
     
     output logic [31:0]     result,
-    output logic            zero
+    output logic            zero,
+                            negative
     
 );
 
@@ -33,7 +34,8 @@ module ALU (
         endcase
     end
     
-    // Zero flag is set depending on the result
-    assign zero = (result == 32'h00000000) ? 1'b0 : 1'b1;
+    // Assign flags based on result
+    assign zero = (result == 32'h00000000) ? 1'b1 : 1'b0;       // Zero
+    assign negative = (result < 32'h00000000) ? 1'b1 : 1'b0;    // Negative
 
 endmodule

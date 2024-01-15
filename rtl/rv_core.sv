@@ -18,7 +18,7 @@ module rv_core(
     // -------------- DATAPATH -------------- //
     
     // Internal signals for datapath module (explained within module)
-    logic           RegWE_E, RegWE_W, OpBSrcE, PCSrcE, zero;
+    logic           RegWE_E, RegWE_W, OpBSrcE, PCSrcE, zero, negative;
     logic [1:0]     ExPathE, ImmFormatD;
     logic [2:0]     ALUFuncE;
     
@@ -38,7 +38,8 @@ module rv_core(
         ALUResult,                      // External outputs
         WriteData,
         PCF,
-        zero                            // Internal outputs (to control)
+        zero,                           // Internal outputs (to control)
+        negative
     );
     
     // -------------- CONTROL -------------- //
@@ -53,17 +54,19 @@ module rv_core(
     assign funct7b5 = Instr[30];
     
     control control(
-        op,                             // Instruction fields for RV32I
+        op,                                 // Inputs from external sources
         funct3,
         funct7b5,
-        RegWE_E,                         // Outputs to internal destinations (to datapath)
+        zero,                               // Inputs from internal sources
+        negative,
+        RegWE_E,                            // Outputs to internal destinations (to datapath)
         RegWE_W,
         OpBSrcE,
         PCSrcE,
         ExPathE,
         ImmFormatD,
         ALUFuncE,
-        MemWrite                        // Outputs to external destinations
+        MemWrite                            // Outputs to external destinations
     );
 
 endmodule
