@@ -5,9 +5,9 @@ A link to the project planning interface (Notion) can be found [here.](https://b
 ![Block_Diagram](https://github.com/will-arden/risc-v-core/blob/main/doc/block_diagram?raw=true)
 
 ### Changelog (v0.3.3)
-* BEQ, BNE, BLT and BGE are fully implemented and functional
-* Fixed negative flag issue in ALU
-* Tidied-up register_file.sv
+* `BEQ`, `BNE`, `BLT` and `BGE` are fully implemented and functional
+* Fixed negative flag issue in `ALU.sv`
+* Tidied-up `register_file.sv`
 * Register values become `0x0` on reset, and register `x0` is hard-wired to `0x0`
 * ALU subtraction bug fixed
 * `JAL` instructions now write the link address (`PC+4`) to the register file
