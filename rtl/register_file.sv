@@ -34,12 +34,12 @@ module register_file(
         // If the addresses are different - there is no contention.
         // If the addresses are the same but one of the WE flags is 0 - there is no contention.
     
-        if( (A3 == A4) && RegWE_E && RegWE_W )              // If there is contention:
-            data[A3] = WD3;                                     // Prefer Execute value (newest)
+        if( (A3 == A4) && RegWE_E && RegWE_W && !reset )            // If there is contention:
+            data[A3] = WD3;                                             // Prefer Execute value (newest)
             
-        else begin                                          // If there is no contention:
-            if(A3 != 5'b00000 && RegWE_E) data[A3] = WD3;       // Write from Execute (or)
-            if(A4 != 5'b00000 && RegWE_W) data[A4] = WD4;       // Write from Writeback
+        else begin                                                  // If there is no contention:
+            if(A3 != 5'b00000 && RegWE_E && !reset) data[A3] = WD3;     // Write from Execute (or)
+            if(A4 != 5'b00000 && RegWE_W && !reset) data[A4] = WD4;     // Write from Writeback
         end
     end
     
