@@ -55,6 +55,7 @@ module control(
                 3'b111:         control_signals[3:1] = 3'b010;                          // AND operation
                 default:        control_signals[3:1] = 'x;                              // Invalid operation
             endcase
+            condition_met = 1'bx;       // For non-branch instructions, the condition doesn't matter. This line avoids latch generation.
         end
         else begin
             unique case (funct3)
