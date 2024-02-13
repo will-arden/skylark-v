@@ -1,5 +1,3 @@
-`timescale 1ns / 1ps
-
 module dmem #(
     parameter MEM_SIZE = 64)
 (
@@ -12,11 +10,12 @@ module dmem #(
 
     logic [31:0] data[MEM_SIZE-1:0];            // Create memory space
     
-    // Writing
+    // Writing to external memory
     always_ff @(posedge clk) begin
-        if(WE) data[A] = WD;
+        if(WE) data[A] <= WD;
     end
     
+    // Reading from external memory
     assign RD = data[A];
 
 endmodule

@@ -8,7 +8,7 @@ module tb_register_file;
     logic [31:0]    WD3, WD4,
                     RD1, RD2;
 
-    GPR dut(
+    register_file dut(
         clk,
         reset,
         RegWE_E,

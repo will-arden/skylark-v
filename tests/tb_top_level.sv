@@ -1,12 +1,12 @@
-`timescale 1ns/1ps
+`timescale 1ns / 1ps
 
-`define IMEM_PATH "C:/Users/willa/RISCV_core/user_data/branch_instructions.dat"
+`define IMEM_PATH "C:/Users/willa/skylark-v/user_data/program3.dat"
 `define IMEM_SIZE 32
 `define DMEM_SIZE 64
 
 module tb_top_level;
 
-// -------------- CORE --------------
+// -------------- CORE -------------- //
 
     // Inputs to core
     logic           clk, reset;
@@ -14,58 +14,48 @@ module tb_top_level;
     
     // Outputs from core
     logic           MemWrite;
-    logic [31:0]    ALUResult, WriteData, PCF;
+    logic [31:0]    ALUResultW, WriteData, PCF;
 
     // Instantiate core
-    rv_core rv_core(
+    skylark_core skylark_core(
         clk,
         reset,
         InstrF,
         ReadData,
         MemWrite,
-        ALUResult,
+        ALUResultW,
         WriteData,
         PCF
     );
     
-// -------------- INSTRUCTION MEMORY -------------- //
+// -------------- RESET AND CLOCK -------------- //
+
+    initial begin
+        reset <= 1'b1;
+        #15;
+        reset <= 1'b0;
+    end
+    
+    always begin
+        clk <= 1'b1;
+        #10;
+        clk <= 1'b0;
+        #10;
+    end
+    
+// -------------- EXTERNAL MEMORIES -------------- //
 
     imem #(`IMEM_SIZE, `IMEM_PATH) imem(
         PCF,
         InstrF
     );
-    
-// -------------- DATA MEMORY -------------- //
-
-    logic [31:0]        WriteAddr;
 
     dmem #(`DMEM_SIZE) dmem(
         clk, reset,
         MemWrite,
-        WriteAddr,
+        ALUResultW,
         WriteData,
         ReadData
     );
-    
-// -------------- SIMULATION -------------- //
-
-    initial begin
-    
-        // Initialize core inputs
-        clk = 1'b0;
-        WriteAddr = 32'h00000000;
-        
-        // Reset device by toggling reset signal
-        reset <= 1'b1;
-        #10;
-        reset <= 1'b0;
-        
-    end
-    
-    // Generate clock signal
-    always begin
-        clk <= !clk;
-        #10;
-    end
 
 endmodule

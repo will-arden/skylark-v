@@ -1,0 +1,23 @@
+nop
+nop
+nop
+addi x1, x0, 1
+nop
+nop
+nop
+addi x2, x0, 2
+nop
+nop
+nop
+add x3, x1, x2
+nop
+nop
+nop
+sw x3, 0(x0)
+nop
+nop
+nop
+lw x4, 0(x0)
+nop
+nop
+nop

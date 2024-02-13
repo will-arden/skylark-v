@@ -1,5 +1,3 @@
-`timescale 1ns / 1ps
-
 module mux3to1 #(
     parameter DATA_WIDTH = 32)
 (

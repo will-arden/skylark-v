@@ -1,5 +1,3 @@
-`timescale 1ns / 1ps
-
 module agu(
 
     input logic [31:0]      ExtImmE,            // Immediate value (address offset)
