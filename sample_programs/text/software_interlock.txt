@@ -1,0 +1,24 @@
+init:
+	addi x2, x0, #14
+	nop
+	nop
+	nop
+	nop
+
+
+loop:
+	addi x1, x1, #1
+	nop
+	nop
+	nop
+	nop
+	beq x1, x2, terminate
+	jal x0, loop
+
+
+terminate:
+	nop
+	nop
+	nop
+	nop
+	jal, x0, terminate

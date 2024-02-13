@@ -1,0 +1,15 @@
+addi x10, x0, 3
+
+loop:
+  addi x1, x0, 1
+  addi x2, x0, 2
+  add x3, x1, x2
+  sub x6, x3, x2
+  addi x9, x9, 1
+  sw x3, 0(x0)
+  lw x4, 0(x0)
+  addi x7, x4, 1
+  bne x9, x10, loop
+
+terminate:
+  jal x31, terminate
