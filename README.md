@@ -40,3 +40,5 @@ A link to the project planning interface (Notion) can be found [here.](https://b
 * Fixed negative flag issue in `ALU.sv`
 * `JAL` instructions now write the link address (`PC+4`) to the register file
 * 3:1 multiplexer added to select the output from the Execute stage (selecting using `ExPathE`)
+
+![Skylark](https://github.com/will-arden/risc-v-core/blob/main/doc/skylark2.jfif?raw=true)
