@@ -21,6 +21,7 @@ A link to the project planning interface (Notion) can be found [here.](https://b
 * Clean code and remove flying signals
 * Move HCU to Control module
 * Create a Decode module within Control module
+* Create and include the BNN unit and support the accompanying BNN instructions
 
 ---
 
