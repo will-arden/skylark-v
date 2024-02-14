@@ -7,6 +7,12 @@ A link to the project planning interface (Notion) can be found [here.](https://b
 ![Block_Diagram](https://github.com/will-arden/risc-v-core/blob/main/doc/block_diagram?raw=true)
 *Note: This is an outdated system diagram.*
 
+### To-do
+* Clean code and remove flying signals
+* Move HCU to Control module
+* Create a `Decoder` module within Control module
+* Create and include the BNN unit and support the accompanying BNN instructions
+
 ### Changelog (v0.4.0)
 * Three pipeline registers added to create a 4-stage pipelined implementation
 * Hazard Control Unit created
@@ -23,12 +29,6 @@ A link to the project planning interface (Notion) can be found [here.](https://b
 * The `WriteAddr` signal was previously always set to `0x0`. Instead, the `ALUResult` signal should be used when specifying the write address to external data memory.
 * Used a for-loop in the register file for zeroing the registers on reset - much more code-efficient.
 * On reset, the pipeline is filled with `NOP` instructions.
- 
-### To-do
-* Clean code and remove flying signals
-* Move HCU to Control module
-* Create a `Decoder` module within Control module
-* Create and include the BNN unit and support the accompanying BNN instructions
 
 ---
 
