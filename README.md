@@ -7,6 +7,8 @@ A link to the project planning interface (Notion) can be found [here.](https://b
 ![Block_Diagram](https://github.com/will-arden/risc-v-core/blob/main/doc/block_diagram?raw=true)
 *Note: This is an outdated system diagram.*
 
+---
+
 ### To-do
 * Clean code and remove flying signals
 * Move HCU to Control module
