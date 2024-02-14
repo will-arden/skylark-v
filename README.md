@@ -12,7 +12,7 @@ A link to the project planning interface (Notion) can be found [here.](https://b
 ### To-do
 * Tidy code
   - Move HCU to Control module
-  - Create a `Decoder` module within Control module
+  - Apportion instruction decode logic to a dedicated `Decoder` module within the Control module
   - Remove unused flying signals
 * Create and include the BNN unit and support the accompanying BNN instructions
 * Add a *load stall buffer* to minimise load stalling (currently 2 cycles)
