@@ -14,6 +14,8 @@ A link to the project planning interface (Notion) can be found [here.](https://b
 * Move HCU to Control module
 * Create a `Decoder` module within Control module
 * Create and include the BNN unit and support the accompanying BNN instructions
+* Add a *load stall buffer* to minimise load stalling (currently 2 cycles)
+* Simplify the branch behaviour
 
 ### Changelog (v0.4.0)
 * Three pipeline registers added to create a 4-stage pipelined implementation
