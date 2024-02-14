@@ -18,7 +18,7 @@ A link to the project planning interface (Notion) can be found [here.](https://b
   - Fetch stage outputs a `branched_flag_F` signal following a branch
 * Changed `Instr` to `InstrF` in the top-level modules
 * Changed `zero` and `negative` to `Z` and `N` respectively
-* Removed the ``timescale` directive from all modules bar the top-level testbench
+* Removed the `timescale` directive from all modules bar the top-level testbench
 * The `WriteAddr` signal was previously always set to `0x0`. Instead, the `ALUResult` signal should be used when specifying the write address to external data memory.
 * Used a for-loop in the register file for zeroing the registers on reset - much more code-efficient.
 * On reset, the pipeline is filled with `NOP` instructions.
