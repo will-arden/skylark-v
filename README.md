@@ -16,6 +16,7 @@ A link to the project planning interface (Notion) can be found [here.](https://b
 * Branch instructions supported for pipelined architecture
   - AGU moved to the Decode stage
   - Fetch stage outputs a `branched_flag_F` signal following a branch
+#### Other minor changes
 * Changed `Instr` to `InstrF` in the top-level modules
 * Changed `zero` and `negative` to `Z` and `N` respectively
 * Removed the `timescale` directive from all modules bar the top-level testbench
