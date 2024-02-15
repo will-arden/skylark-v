@@ -30,7 +30,7 @@ module datapath(
                                 N,
                                 branched_flag_F,
     output logic [4:0]          A1_E, A2_E,             // Source registers (for HCU)                   (Execute)
-                                A3_W, A4_W              // Destination registers (for HCU)              (Writeback)
+                                A3_W                    // Destination registers (for HCU)              (Writeback)
 
 );
 
@@ -44,7 +44,6 @@ module datapath(
     // Address Generation Unit signals
     logic [31:0] PCE, TargetAddr;
     
-    
 /*
   ___           _                   _   _               _____    _       _     
  |_ _|_ __  ___| |_ _ __ _   _  ___| |_(_) ___  _ __   |  ___|__| |_ ___| |__  
@@ -53,7 +52,6 @@ module datapath(
  |___|_| |_|___/\__|_|   \__,_|\___|\__|_|\___/|_| |_| |_|  \___|\__\___|_| |_|
                                                                                                
 */
-    
     
 // -------------- PROGRAM COUNTER -------------- //
 
@@ -99,7 +97,8 @@ module datapath(
 
     // Internal signals input to register file
     logic [4:0]     A1_D, A2_D, A3_D, A4_D,             // Decode signals
-                    A3_E, A4_E;                         // Execute signals
+                    A3_E, A4_E,                         // Execute signals
+                    A4_W;                               // Writeback signal
                     
     logic [31:0]    WD3, WD4, RD1_D, RD2_D;
     

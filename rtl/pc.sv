@@ -31,7 +31,6 @@ module pc(
                 branched_flag_F <= 1'b0;
             end
         end
-        //else if(!StallF)        PCF <= (PCSrc) ? TargetAddr : PCNextF;  // Select next PC value
     end
     
     // PC Incrementer

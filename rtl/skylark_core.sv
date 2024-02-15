@@ -17,28 +17,18 @@ module skylark_core(
 
 // -------------- INTERMEDIATE SIGNALS -------------- //
 
-    logic Z, N;
-
-    // Instruction Fields (for Control module)
-    logic [6:0]     op_F;
-    logic [2:0]     funct3_F;
-    logic           funct7b5_F;
-    
-    assign op_F         = InstrF[6:0];
-    assign funct3_F     = InstrF[14:12];
-    assign funct7b5_F   = InstrF[30];
-    
-// -------------- HAZARD CONTROL UNIT -------------- //
-
-    // Control signals (some of which may be used for HCU)
-    logic           RegWE_E_D, RegWE_E_E, RegWE_E_W,        // Execute Register Write Enable control bits
-                    RegWE_W_D, RegWE_W_E, RegWE_W_W,        // Writeback Register Write Enable control bits
-                    OpBSrcD, OpBSrcE;                       // ALU Operand B select bits
+    // Control signals
+    logic           RegWE_E_E, RegWE_E_W,                   // Execute Register Write Enable control bits
+                    RegWE_W_E, RegWE_W_W;                   // Writeback Register Write Enable control bits
+    logic           condition_met_E,
+                    branch_D, jump_D,                       // Branch/Jump signals                  (Decode)
+                    branch_E, jump_E,                       //                                      (Execute)
+                    branched_flag_F, branched_flag_D,       // Flag asserted after branch/jump
+                    OpBSrcE;                                // ALU Operand B select bits
     logic [1:0]     PCSrcE;                                 // PC source select bit
-    logic           MemWriteE;                              // External memory write enable bits
-    logic [1:0]     ExPathD, ExPathE,                       // Execute path to be used
+    logic [1:0]     ExPathE,                                // Execute path to be used
                     ImmFormatD;                             // Immediate value format (not pipelined, as it is used in the same stage)
-    logic [2:0]     ALUFuncD, ALUFuncE;                     // ALU operation select bits
+    logic [2:0]     ALUFuncE;                               // ALU operation select bits
 
     // Stall & Flush signals for pipeline registers
     logic           StallF, StallD, StallE, StallW;
@@ -47,52 +37,30 @@ module skylark_core(
     // Forwarding signals
     logic           fwdA_E, fwdB_E;
     
+    // Datapath signals
+    logic Z, N;
     logic [4:0] A1_E, A2_E, A3_W, A4_W;
-    logic condition_met_E, branch_D, jump_D, branch_E, jump_E, branched_flag_F, branched_flag_D;
     
-    hcu hcu(
-        clk, reset,
-        A1_E, A2_E,                     // Source registers
-        A3_W, A4_W,                     // Destination registers (Execute and Writeback, respectively)
-        RegWE_E_W,                      // Detects RAW hazards
-        RegWE_W_E,                      // Detects load operation in Execute stage
-        RegWE_W_W,
-        condition_met_E,
-        branch_D, jump_D,
-        branch_E, jump_E,
-        branched_flag_F,
-        StallF,
-        StallD, FlushD,
-        StallE, FlushE,
-        StallW, FlushW,
-        fwdA_E, fwdB_E
-    );
+
     
 // -------------- CONTROL -------------- //
 
     control control(
-        clk,
+        clk,                                // Inputs
         reset,
-        StallD,
-        StallE,
-        StallW,
-        FlushD,
-        FlushE,
-        FlushW,
-        op_F,
-        funct3_F,
-        funct7b5_F,
         branched_flag_F,
-        Z,
-        N,
-        RegWE_E_E, RegWE_E_W,
-        RegWE_W_E, RegWE_W_W,
-        condition_met_E,
+        Z, N,
+        A1_E, A2_E,
+        A3_W,
+        InstrF,
+        RegWE_E_E, RegWE_W_W,               // Outputs
         OpBSrcE,
+        StallF,
+        StallD, FlushD,
+        StallE, FlushE,
+        StallW, FlushW,
+        fwdA_E, fwdB_E,
         PCSrcE,
-        branch_D, jump_D,
-        branch_E, jump_E,
-        branched_flag_D,
         ExPathE,
         ImmFormatD,
         ALUFuncE,
@@ -128,8 +96,8 @@ module skylark_core(
         Z,                              // Internal outputs (to control)
         N,
         branched_flag_F,
-        A1_E, A2_E,                     // Internal outputs (to HCU)
-        A3_W, A4_W
+        A1_E, A2_E,
+        A3_W
     );
 
 endmodule
