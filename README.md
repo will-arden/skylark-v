@@ -10,15 +10,21 @@ A link to the project planning interface (Notion) can be found [here.](https://b
 ---
 
 ### To-do
-* Tidy code
-  - Move HCU to Control module
-  - Apportion instruction decode logic to a dedicated `Decoder` module within the Control module
-  - Remove unused flying signals
 * Create and include the BNN unit and support the accompanying BNN instructions
 * Add a *load stall buffer* to minimise load stalling (currently 2 cycles)
 * Simplify the branch behaviour
 
-### Changelog (v0.4.0)
+### Changelog (v0.4.1)
+* Tidied SystemVerilog code and comments
+* Removed unused/unnecesary signals
+* Created a `decoder` module within `control` to handle the instruction decode logic in a dedicated unit
+* Moved the `hcu` module into the `control` module
+
+---
+
+### Previous versions
+
+#### Changelog (v0.4.0)
 * Three pipeline registers added to create a 4-stage pipelined implementation
 * Hazard Control Unit created
 * Forwarding multiplexers added for RAW hazards
@@ -34,10 +40,6 @@ A link to the project planning interface (Notion) can be found [here.](https://b
 * The `WriteAddr` signal was previously always set to `0x0`. Instead, the `ALUResult` signal should be used when specifying the write address to external data memory.
 * Used a for-loop in the register file for zeroing the registers on reset - much more code-efficient.
 * On reset, the pipeline is filled with `NOP` instructions.
-
----
-
-### Previous versions
 
 #### Changelog (v0.3.5)
 * Register file reset bug fixed
