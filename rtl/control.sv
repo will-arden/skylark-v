@@ -3,6 +3,7 @@ module control(
     input logic                 clk, reset,
                                 branched_flag_F,
                                 Z, N,
+                                RegWE_W_W2,             // This control signal is input from the load stall buffer
     input [4:0]                 A1_E, A2_E,
                                 A3_W,
     input logic [31:0]          InstrF,
@@ -15,8 +16,8 @@ module control(
                                 StallD, FlushD,
                                 StallE, FlushE,
                                 StallW, FlushW,
-                                fwdA_E, fwdB_E,
-    output logic [1:0]          PCSrcE,                 // Selects branch target address or +4          (Execute)         
+    output logic [1:0]          fwdA_E, fwdB_E,
+                                PCSrcE,                 // Selects branch target address or +4          (Execute)         
                                 ExPathE,                // Select desired Execute stage path            (Execute)
                                 ImmFormatD,             // Format of immediate value for Extend Unit    (Decode)
     output logic [2:0]          ALUFuncE,               // Controls the ALU's operation                 (Execute)
@@ -121,6 +122,8 @@ module control(
                                                  
 */
 
+// -------------- EXECUTE-WRITEBACK PIPELINE REGISTER -------------- //
+
     c_ex_wb_pipeline_register c_ex_wb_pipeline_register(
         clk,
         reset,
@@ -145,6 +148,7 @@ module control(
         RegWE_E_W,                      // Detects RAW hazards
         RegWE_W_E,                      // Detects load operation in Execute stage
         RegWE_W_W,
+        RegWE_W_W2,                     // Input from load stall buffer
         condition_met_E,
         branch_D, jump_D,
         branch_E,
