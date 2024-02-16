@@ -10,19 +10,24 @@ A link to the project planning interface (Notion) can be found [here.](https://b
 ---
 
 ### To-do
-* Create and include the BNN unit and support the accompanying BNN instructions
-* Add a *load stall buffer* to minimise load stalling (currently 2 cycles)
+* Utilise the `bnn` module and support at least 1 custom BNN instruction
 * Simplify the branch behaviour
+* Make the project synthesisable for the Basys3 FPGA development board
 
-### Changelog (v0.4.1)
-* Tidied SystemVerilog code and comments
-* Removed unused/unnecesary signals
-* Created a `decoder` module within `control` to handle the instruction decode logic in a dedicated unit
-* Moved the `hcu` module into the `control` module
+### Changelog (v0.4.2)
+* Added a *load stall buffer*, doubling the efficiency when handling *load use* data hazards
+* Included - **but not instantiated** - a `bnn` module and testbench
+* Small syntax and presentation fixes
 
 ---
 
 ### Previous versions
+
+#### Changelog (v0.4.1)
+* Tidied SystemVerilog code and comments
+* Removed unused/unnecesary signals
+* Created a `decoder` module within `control` to handle the instruction decode logic in a dedicated unit
+* Moved the `hcu` module into the `control` module
 
 #### Changelog (v0.4.0)
 * Three pipeline registers added to create a 4-stage pipelined implementation
