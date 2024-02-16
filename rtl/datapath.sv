@@ -16,9 +16,9 @@ module datapath(
                                 FlushD,                 // Flushes the pipeline                         (Decode)
                                 FlushE,                 // Flushes the pipeline                         (Execute)
                                 FlushW,                 // Flushes the pipeline                         (Writeback)
-    input logic                 fwdA_E,                 // Forward select for operand A                 (Execute)
+    input logic [1:0]           fwdA_E,                 // Forward select for operand A                 (Execute)
                                 fwdB_E,                 // Forward select for operand B                 (Execute)
-    input logic [1:0]           ExPathE,                // Select desired Execute stage path            (Execute)
+                                ExPathE,                // Select desired Execute stage path            (Execute)
                                 ImmFormatD,             // Format of immediate value for Extend Unit    (Decode)
     input logic [2:0]           ALUFuncE,               // Controls the ALU's operation                 (Execute)
     
@@ -103,10 +103,10 @@ module datapath(
     logic [31:0]    WD3, WD4, RD1_D, RD2_D;
     
     // Extract correct bits from instruction
-    assign A1_D = InstrD[19:15];                // rs1
-    assign A2_D = InstrD[24:20];                // rs2
-    assign A3_D = InstrD[11:7];                 // rd (Execute)
-    assign A4_D = A3_D;                         // rd (Writeback) -- FOR NOW, these are the same. Need to add pipeline registers first.
+    assign A1_D = InstrD[19:15];        // rs1
+    assign A2_D = InstrD[24:20];        // rs2
+    assign A3_D = InstrD[11:7];         // rd (Execute)
+    assign A4_D = InstrD[11:7];         // rd (Writeback)   -   this occupies the same space as A3_D, as it is just the destination address
 
     register_file register_file(
         clk,
@@ -170,28 +170,27 @@ module datapath(
     
 // -------------- FORWARDING SWITCHES -------------- //
 
-    logic [31:0] OpA_E, OpB_E;
+    logic [31:0]    OpA_E, OpB_E;
+    
+    logic [31:0]    ReadData2;
 
-    mux2to1 fwd_mux_a(
-        RD1_E,
-        ALUResultW,
-        fwdA_E,
-        OpA_E
+    mux3to1 fwd_mux_a(
+        RD1_E,                      // a
+        ALUResultW,                 // b
+        ReadData2,                  // c
+        fwdA_E,                     // sel
+        OpA_E                       // y
     );
     
-    mux2to1 fwd_mux_b(
-        RD2_E,
-        ALUResultW,
-        fwdB_E,
-        OpB_E
+    mux3to1 fwd_mux_b(
+        RD2_E,                      // a
+        ALUResultW,                 // b
+        ReadData2,                  // c
+        fwdB_E,                     // sel
+        OpB_E                       // y
     );
     
 // -------------- ARITHMETIC LOGIC UNIT -------------- //
-
-    /* Internal signals input to ALU
-    logic [31:0] OpA, OpB, ALUResultE;
-    assign OpA = RD1_E;
-    assign OpB = RD2_E;*/
     
     logic [31:0] ALUResultE;
     
@@ -232,7 +231,11 @@ module datapath(
                                                  
 */
 
-    logic [31:0]     RD2_W, PCNextW;
+    logic               RegWE_W_W2;
+    logic [4:0]         A4_W2;
+    logic [31:0]        RD2_W, PCNextW;
+                        
+// -------------- EXECUTE-WRITEBACK PIPELINE REGISTER -------------- //
 
     dp_ex_wb_pipeline_register dp_ex_wb_pipeline_register(
         clk,
@@ -251,5 +254,18 @@ module datapath(
     
     assign WD       =   RD2_W;
     assign WD4      =   ReadData;
+    
+// -------------- LOAD STALL BUFFER -------------- //
+    
+    lsb lsb(
+        clk,
+        reset,
+        RegWE_W_W,
+        A4_W,
+        ReadData,
+        RegWE_W_W2,
+        A4_W2,
+        ReadData2
+    );
 
 endmodule

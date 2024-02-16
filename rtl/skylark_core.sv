@@ -19,7 +19,8 @@ module skylark_core(
 
     // Control signals
     logic           RegWE_E_E, RegWE_E_W,                   // Execute Register Write Enable control bits
-                    RegWE_W_E, RegWE_W_W;                   // Writeback Register Write Enable control bits
+                    RegWE_W_E, RegWE_W_W,                   // Writeback Register Write Enable control bits
+                    RegWE_W_W2;
     logic           condition_met_E,
                     branch_D, jump_D,                       // Branch/Jump signals                  (Decode)
                     branch_E, jump_E,                       //                                      (Execute)
@@ -35,7 +36,7 @@ module skylark_core(
     logic           FlushD, FlushE, FlushW;
     
     // Forwarding signals
-    logic           fwdA_E, fwdB_E;
+    logic [1:0]     fwdA_E, fwdB_E;
     
     // Datapath signals
     logic Z, N;
@@ -50,6 +51,7 @@ module skylark_core(
         reset,
         branched_flag_F,
         Z, N,
+        RegWE_W_W2,
         A1_E, A2_E,
         A3_W,
         InstrF,

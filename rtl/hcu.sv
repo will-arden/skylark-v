@@ -3,6 +3,7 @@ module hcu(
     input logic         RegWE_E_W,                  // Indicates RAW hazard
                         RegWE_W_E,                  // Load operation indicators        (Execute)
                         RegWE_W_W,                  //                                  (Writeback)
+                        RegWE_W_W2,                 //                                  (Writeback 2)
                         condition_met_E,            // Branch condition met             (Execute)
                         branch_D, jump_D,           // Branch and Jump flags            (Decode)
                         branch_E,                   //                                  (Execute)
@@ -14,7 +15,7 @@ module hcu(
                         StallD, FlushD,
                         StallE, FlushE,
                         StallW, FlushW,
-                        fwdA_E, fwdB_E              // Forwarding control signals
+    output logic [1:0]  fwdA_E, fwdB_E              // Forwarding control signals
     
 );
     
@@ -38,18 +39,27 @@ module hcu(
     
         // RAW Hazard Mitigation (Forwarding)
         if(RegWE_E_W) begin                             // If an Execute result was just stored (RAW)
-            if(A1_E == A3_W)        fwdA_E <= 1'b1;         // Check if OpA requires the result
-            else                    fwdA_E <= 1'b0;
-            if(A2_E == A3_W)        fwdB_E <= 1'b1;         // Check if OpB requires the result
-            else                    fwdB_E <= 1'b0;
-        end
-        else begin                                      // Otherwise, forwarding is not required
-            fwdA_E <= 1'b0;
-            fwdB_E <= 1'b0;
+            if(A1_E == A3_W)        fwdA_E <= 2'b01;        // Check if OpA requires the result
+            else                    fwdA_E <= 2'b00;
+            if(A2_E == A3_W)        fwdB_E <= 2'b01;        // Check if OpB requires the result
+            else                    fwdB_E <= 2'b00;
         end
         
-        // Load (Double) Stall
-        if(RegWE_W_E || RegWE_W_W) begin
+        // Load stall buffer
+        else if(RegWE_W_W2) begin                       // If the Writeback 2 contains a load operation
+            if(A1_E == A3_W)        fwdA_E <= 2'b10;        // Check if OpA requires the result
+            else                    fwdA_E <= 2'b00;
+            if(A2_E == A3_W)        fwdB_E <= 2'b10;        // Check if OpB requires the result
+            else                    fwdB_E <= 2'b00;
+        end
+        
+        else begin                                      // Otherwise, forwarding is not required
+            fwdA_E <= 2'b00;
+            fwdB_E <= 2'b00;
+        end
+        
+        // Load Stall
+        if(RegWE_W_E) begin
             StallF <= 1'b1;
             StallD <= 1'b1;
             StallE <= 1'b1;
