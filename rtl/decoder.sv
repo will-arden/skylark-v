@@ -58,8 +58,13 @@ module decoder(
             endcase
         end
         
+        // Decode stage stalls itself until the branched_flag_F signal is asserted (1 cycle)
         if(!branched_flag_F && (jump_D || branch_D))    control_signals[7:6] <= 2'b01;
+        
+        // If the above doesn't apply, check for misprediction
         else if(!condition_met_E)                       control_signals[7:6] <= 2'b10;
+        
+        // Otherwise, normal PC behaviour (plus 4)
         else                                            control_signals[7:6] <= 2'b00;
         
     end
