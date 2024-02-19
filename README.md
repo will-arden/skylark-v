@@ -14,14 +14,18 @@ A link to the project planning interface (Notion) can be found [here.](https://b
 * Simplify the branch behaviour
 * Make the project synthesisable for the Basys3 FPGA development board
 
-### Changelog (v0.4.2)
-* Added a *load stall buffer*, doubling the efficiency when handling *load use* data hazards
-* Included - **but not instantiated** - a `bnn` module and testbench
-* Small syntax and presentation fixes
+### Changelog (v0.4.3)
+* if/else logic updated in the `hcu` module to avoid potential bugs
+* Comments added to better describe the branch behaviour of this version (soon to be updated)
 
 ---
 
 ### Previous versions
+
+#### Changelog (v0.4.2)
+* Added a *load stall buffer*, doubling the efficiency when handling *load use* data hazards
+* Included - **but not instantiated** - a `bnn` module and testbench
+* Small syntax and presentation fixes
 
 #### Changelog (v0.4.1)
 * Tidied SystemVerilog code and comments
