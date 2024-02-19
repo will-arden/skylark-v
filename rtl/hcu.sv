@@ -45,31 +45,34 @@ module hcu(
             else                    fwdB_E <= 2'b00;
         end
         
-        // Load stall buffer
-        else if(RegWE_W_W2) begin                       // If the Writeback 2 contains a load operation
+        // Load stall buffer (forwarding)
+        if(RegWE_W_W2) begin                       // If the Writeback 2 contains a load operation
             if(A1_E == A3_W)        fwdA_E <= 2'b10;        // Check if OpA requires the result
             else                    fwdA_E <= 2'b00;
             if(A2_E == A3_W)        fwdB_E <= 2'b10;        // Check if OpB requires the result
             else                    fwdB_E <= 2'b00;
         end
         
+        // Default forwarding
         else begin                                      // Otherwise, forwarding is not required
             fwdA_E <= 2'b00;
             fwdB_E <= 2'b00;
         end
         
-        // Load Stall
-        if(RegWE_W_E) begin
-            StallF <= 1'b1;
+        // Load Stall (stalling and flushing)
+        if(RegWE_W_E) begin                             // If load operation is in Execute stage,
+            StallF <= 1'b1;                                 // Stall all prior stages
             StallD <= 1'b1;
             StallE <= 1'b1;
-            FlushE <= 1'b1;
+            FlushE <= 1'b1;                                 // Create a bubble in the Execute stage
         end
-        else if((branch_D || jump_D) && !branched_flag_F) begin
-            StallD <= 1'b1;
+        
+        // Branch behaviour
+        if((branch_D || jump_D) && !branched_flag_F) begin      // If the PC has not yet branched,
+            StallD <= 1'b1;                                         // Decode stage stalls itself
         end
-        else begin
-            StallF <= 1'b0;
+        else begin                                              // When the PC does branch (1 cycle later),
+            StallF <= 1'b0;                                         // Pipeline continues as usual
             StallD <= 1'b0;
             StallE <= 1'b0;
             FlushE <= 1'b0;
