@@ -13,6 +13,7 @@ A link to the project planning interface (Notion) can be found [here.](https://b
 * Utilise the `bnn` module and support at least 1 custom BNN instruction
 * Write a sample program demonstrating convolution with and without the use of the BNN unit
 * Make the project synthesisable for the Basys3 FPGA development board
+* Explore the benefits of a branch prediction unit
 
 ### Changelog (v0.4.4)
 * Simplified the branch behaviour of the processor
