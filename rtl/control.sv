@@ -1,7 +1,6 @@
 module control(
 
     input logic                 clk, reset,
-                                branched_flag_F,
                                 Z, N,
                                 RegWE_W_W2,             // This control signal is input from the load stall buffer
     input [4:0]                 A1_E, A2_E,
@@ -40,11 +39,12 @@ module control(
     logic           RegWE_E_W, RegWE_W_E,
                     branch_D, branch_E,
                     jump_D, jump_E,
+                    condition_met_D,
                     condition_met_E;
                     
     // Declare and assign signals to represent instruction fields
     logic           funct7b5_F, funct7b5_D;             assign funct7b5_F   = InstrF[30];
-    logic [2:0]     funct3_F, funct3_D;                 assign funct3_F     = InstrF[14:12];
+    logic [2:0]     funct3_F, funct3_D, funct3_E;       assign funct3_F     = InstrF[14:12];
     logic [6:0]     op_F, op_D;                         assign op_F         = InstrF[6:0];
     
     // Declare signals to carry Decode stage information to the pipeline register
@@ -68,8 +68,11 @@ module control(
 
     decoder decoder(
         branched_flag_F,                        // Inputs
+        branch_E,
         N, Z,
-        funct7b5_D, funct3_D, op_D,
+        funct7b5_D,
+        funct3_D, funct3_E,
+        op_D,
         RegWE_E_D, RegWE_W_D,                   // Outputs
         branch_D, jump_D,
         condition_met_E,
@@ -105,12 +108,14 @@ module control(
         branch_D, jump_D,
         ExPathD,
         ALUFuncD,
+        funct3_D,
         RegWE_E_E, RegWE_W_E,           // Outputs from register
         OpBSrcE,
         MemWriteE,
         branch_E, jump_E,
         ExPathE,
-        ALUFuncE
+        ALUFuncE,
+        funct3_E
     );
     
 /*
@@ -152,7 +157,6 @@ module control(
         condition_met_E,
         branch_D, jump_D,
         branch_E,
-        branched_flag_F,
         A1_E, A2_E,                     // Source registers
         A3_W,                           // Destination registers (Execute and Writeback, respectively)
         StallF,                         // Outputs (Stall, Flush and Forwarding signals)

@@ -28,7 +28,6 @@ module datapath(
     // Outputs to internal devices (to control)
     output logic                Z,
                                 N,
-                                branched_flag_F,
     output logic [4:0]          A1_E, A2_E,             // Source registers (for HCU)                   (Execute)
                                 A3_W                    // Destination registers (for HCU)              (Writeback)
 
@@ -62,7 +61,6 @@ module datapath(
         PCSrcE,
         TargetAddr,
         PCNextE,
-        branched_flag_F,
         PCF,
         PCNextF
     );
