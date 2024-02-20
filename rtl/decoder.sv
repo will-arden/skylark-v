@@ -1,9 +1,11 @@
 module decoder(
     
     input logic             branched_flag_F,
+                            branch_E,
                             N, Z,
                             funct7b5_D,
     input logic [2:0]       funct3_D,
+                            funct3_E,
     input logic [6:0]       op_D,
     
     output logic            RegWE_E_D, RegWE_W_D,
@@ -45,11 +47,11 @@ module decoder(
                 3'b111:         control_signals[3:1] <= 3'b010;                          // AND operation
                 default:        control_signals[3:1] <= 'x;                              // Invalid operation
             endcase
-            condition_met_E <= 1'bx;       // For non-branch instructions, the condition doesn't matter. This line avoids latch generation.
         end
         
-        else begin
-            unique case (funct3_D)
+        // Misprediction check
+        if(branch_E) begin
+            unique case (funct3_E)
                 3'b000:         condition_met_E <= Z;           // BEQ
                 3'b001:         condition_met_E <= !Z;          // BNE
                 3'b100:         condition_met_E <= N;           // BLT
@@ -58,14 +60,14 @@ module decoder(
             endcase
         end
         
-        // Decode stage stalls itself until the branched_flag_F signal is asserted (1 cycle)
-        if(!branched_flag_F && (jump_D || branch_D))    control_signals[7:6] <= 2'b01;
+        // Check for misprediction
+        if(branch_E && !condition_met_E)    control_signals[7:6] <= 2'b10;
         
-        // If the above doesn't apply, check for misprediction
-        else if(!condition_met_E)                       control_signals[7:6] <= 2'b10;
+        // If safe from mispredictions, check for jump/branch and assume it will be taken
+        else if(branch_D || jump_D)         control_signals[7:6] <= 2'b01;
         
-        // Otherwise, normal PC behaviour (plus 4)
-        else                                            control_signals[7:6] <= 2'b00;
+        // Otherwise, normal PC behaviour (increment)
+        else                                control_signals[7:6] <= 2'b00;
         
     end
     

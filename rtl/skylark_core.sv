@@ -24,7 +24,6 @@ module skylark_core(
     logic           condition_met_E,
                     branch_D, jump_D,                       // Branch/Jump signals                  (Decode)
                     branch_E, jump_E,                       //                                      (Execute)
-                    branched_flag_F, branched_flag_D,       // Flag asserted after branch/jump
                     OpBSrcE;                                // ALU Operand B select bits
     logic [1:0]     PCSrcE;                                 // PC source select bit
     logic [1:0]     ExPathE,                                // Execute path to be used
@@ -49,7 +48,6 @@ module skylark_core(
     control control(
         clk,                                // Inputs
         reset,
-        branched_flag_F,
         Z, N,
         RegWE_W_W2,
         A1_E, A2_E,
@@ -97,7 +95,6 @@ module skylark_core(
         PCF,
         Z,                              // Internal outputs (to control)
         N,
-        branched_flag_F,
         A1_E, A2_E,
         A3_W
     );

@@ -11,16 +11,26 @@ A link to the project planning interface (Notion) can be found [here.](https://b
 
 ### To-do
 * Utilise the `bnn` module and support at least 1 custom BNN instruction
-* Simplify the branch behaviour
+* Write a sample program demonstrating convolution with and without the use of the BNN unit
 * Make the project synthesisable for the Basys3 FPGA development board
+* Explore the benefits of a branch prediction unit
 
-### Changelog (v0.4.3)
-* if/else logic updated in the `hcu` module to avoid potential bugs
-* Comments added to better describe the branch behaviour of this version (soon to be updated)
+### Changelog (v0.4.4)
+* Simplified the branch behaviour of the processor
+  - Removed the `branched_flag_F` and `branched_flag_D` signals
+  - Updated the `hcu` to accommodate for new branch behaviour
+  - Updated the `decoder` to detect mispredictions (calculated in the *Execute* stage) and handle branches/jumps correctly
+  - Updated the `c_id_ex_pipeline_register` module to assist the `decoder`
+* Separated the `hcu` module into *Forwarding* and *Stalling & Flushing* - improves readability and less error-prone
+* Small readability improvements
 
 ---
 
 ### Previous versions
+
+#### Changelog (v0.4.3)
+* if/else logic updated in the `hcu` module to avoid potential bugs
+* Comments added to better describe the branch behaviour of this version (soon to be updated)
 
 #### Changelog (v0.4.2)
 * Added a *load stall buffer*, doubling the efficiency when handling *load use* data hazards
