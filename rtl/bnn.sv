@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 module bnn(
 
     input logic [31:0]      OpA_E, OpB_E,

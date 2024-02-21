@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 module extend_unit(
 
     input logic [1:0]       ImmFormatD,

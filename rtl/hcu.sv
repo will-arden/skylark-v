@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 module hcu(
     
     input logic         RegWE_E_W,                  // Indicates RAW hazard

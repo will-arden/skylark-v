@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 module mux2to1 #(
     parameter DATA_WIDTH = 32)
 (

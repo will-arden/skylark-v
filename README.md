@@ -1,6 +1,8 @@
 # skylark-v
 *skylark-v* is a lightweight and straightforward 4-stage [RISC-V](https://riscv.org/) processor, inspired by [RI5CY](https://www.pulp-platform.org/docs/ri5cy_user_manual.pdf) and implemented in SystemVerilog. The standout feature of this design is the inclusion of a hardware acceleration unit for [Binarized Neural Network (BNN)](https://arxiv.org/abs/1603.05279) inference operations.  
 
+This university project is designed for the Digilent Basys 3 development board, and is compatible with the undivided 100MHz clock provided onboard. The IP, along with the constraint file and the zipped Vivado project (2018.3 webpack edition) can be found in the build folder.
+
 A link to the project planning interface (Notion) can be found [here.](https://boatneck-ping-f37.notion.site/Individual-Project-24f37a1b95bd4415b68c7d97c25824d7?pvs=4) It documents the journey so far!
 
 ### System Design Diagram:
@@ -10,12 +12,29 @@ A link to the project planning interface (Notion) can be found [here.](https://b
 ---
 
 ### To-do
+* Create a demo to show the efficiency of *skylark-v* compared to a single-cycle processor (from the Harris & Harris book)
 * Utilise the `bnn` module and support at least 1 custom BNN instruction
 * Write a sample program demonstrating convolution with and without the use of the BNN unit
-* Make the project synthesisable for the Basys3 FPGA development board
 * Explore the benefits of a branch prediction unit
 
-### Changelog (v0.4.4)
+### Changelog (v0.5.0)
+* Created a `soc` module, which replaces the top level testbench for FPGA synthesis
+  - Instantiated instruction memory and data memory
+  - Proves functionality via two LEDs
+  - 7-segment display is utilised in a very basic manner (to prove it is a resource that can be accessed)
+* Constraint file added
+* Bitstreams generated and IP made available on GitHub
+* Vivado project included on GitHub (configured for the Basys 3 development board)
+
+#### Other minor changes
+* `display_encoder` module created but not used
+* `timescale` directive added to every module, based on guidance from Frank Bruno's book
+
+---
+
+### Previous versions
+
+#### Changelog (v0.4.4)
 * Simplified the branch behaviour of the processor
   - Removed the `branched_flag_F` and `branched_flag_D` signals
   - Updated the `hcu` to accommodate for new branch behaviour
@@ -23,10 +42,6 @@ A link to the project planning interface (Notion) can be found [here.](https://b
   - Updated the `c_id_ex_pipeline_register` module to assist the `decoder`
 * Separated the `hcu` module into *Forwarding* and *Stalling & Flushing* - improves readability and less error-prone
 * Small readability improvements
-
----
-
-### Previous versions
 
 #### Changelog (v0.4.3)
 * if/else logic updated in the `hcu` module to avoid potential bugs

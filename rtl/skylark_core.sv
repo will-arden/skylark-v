@@ -7,6 +7,8 @@
            |___/                                   
 */
 
+`timescale 1ns / 1ps
+
 module skylark_core(
     input logic             clk, reset,
     input logic [31:0]      InstrF, ReadData,
@@ -70,7 +72,7 @@ module skylark_core(
 // -------------- DATAPATH -------------- //
 
     // Instantiate the datapath
-    datapath dp(
+    datapath datapath(
         clk,                            // External inputs
         reset,
         InstrF,
