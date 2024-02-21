@@ -10,7 +10,7 @@ A link to the project planning interface (Notion) can be found [here.](https://b
 ---
 
 ### To-do
-* Create a demo to show the efficiency of skylark-v compared to a single-cycle processor (from the Harris & Harris book)
+* Create a demo to show the efficiency of *skylark-v* compared to a single-cycle processor (from the Harris & Harris book)
 * Utilise the `bnn` module and support at least 1 custom BNN instruction
 * Write a sample program demonstrating convolution with and without the use of the BNN unit
 * Explore the benefits of a branch prediction unit
