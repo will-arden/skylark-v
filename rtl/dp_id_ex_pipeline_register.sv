@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 module dp_id_ex_pipeline_register(
 
     input logic                 clk, reset,

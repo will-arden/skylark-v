@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 module c_if_id_pipeline_register(
 
     input logic                 clk, reset,

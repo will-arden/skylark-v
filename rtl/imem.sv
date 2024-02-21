@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 module imem #(
     parameter MEM_SIZE = 32,
     parameter string IMEM_FILE = "user_data/imem.dat")
@@ -12,7 +14,7 @@ module imem #(
 
     initial begin
         // Read the instructions into RAM
-        $readmemh(IMEM_FILE, memory);
+        $readmemh(IMEM_FILE, memory);           // Not synthesizable
     end
     
     assign InstrF = memory[A[31:2]];            // Ignore two LSB's since instructions are word-aligned
