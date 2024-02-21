@@ -23,6 +23,9 @@ A link to the project planning interface (Notion) can be found [here.](https://b
 * Constraint file added
 * Bitstreams generated and IP made available on GitHub
 * Vivado project included on GitHub (configured for the Basys 3 development board)
+
+#### Other minor changes
+* `display_encoder` module created but not used
 * `timescale` directive added to every module, based on guidance from Frank Bruno's book
 
 ---
