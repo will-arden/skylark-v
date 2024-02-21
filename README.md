@@ -10,12 +10,26 @@ A link to the project planning interface (Notion) can be found [here.](https://b
 ---
 
 ### To-do
+* Create a demo to show the efficiency of skylark-v compared to a single-cycle processor (from the Harris & Harris book)
 * Utilise the `bnn` module and support at least 1 custom BNN instruction
 * Write a sample program demonstrating convolution with and without the use of the BNN unit
-* Make the project synthesisable for the Basys3 FPGA development board
 * Explore the benefits of a branch prediction unit
 
-### Changelog (v0.4.4)
+### Changelog (v0.5.0)
+* Created a `soc` module, which replaces the top level testbench for FPGA synthesis
+  - Instantiated instruction memory and data memory
+  - Proves functionality via two LEDs
+  - 7-segment display is utilised in a very basic manner (to prove it is a resource that can be accessed)
+* Constraint file added
+* Bitstreams generated and IP made available on GitHub
+* Vivado project included on GitHub (configured for the Basys 3 development board)
+* `timescale` directive added to every module, based on guidance from Frank Bruno's book
+
+---
+
+### Previous versions
+
+#### Changelog (v0.4.4)
 * Simplified the branch behaviour of the processor
   - Removed the `branched_flag_F` and `branched_flag_D` signals
   - Updated the `hcu` to accommodate for new branch behaviour
@@ -23,10 +37,6 @@ A link to the project planning interface (Notion) can be found [here.](https://b
   - Updated the `c_id_ex_pipeline_register` module to assist the `decoder`
 * Separated the `hcu` module into *Forwarding* and *Stalling & Flushing* - improves readability and less error-prone
 * Small readability improvements
-
----
-
-### Previous versions
 
 #### Changelog (v0.4.3)
 * if/else logic updated in the `hcu` module to avoid potential bugs
