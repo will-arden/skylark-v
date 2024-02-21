@@ -1,6 +1,8 @@
 # skylark-v
 *skylark-v* is a lightweight and straightforward 4-stage [RISC-V](https://riscv.org/) processor, inspired by [RI5CY](https://www.pulp-platform.org/docs/ri5cy_user_manual.pdf) and implemented in SystemVerilog. The standout feature of this design is the inclusion of a hardware acceleration unit for [Binarized Neural Network (BNN)](https://arxiv.org/abs/1603.05279) inference operations.  
 
+This university project is designed for the Digilent Basys 3 development board, and is compatible with the undivided 100MHz clock provided onboard. The IP, along with the constraint file and the zipped Vivado project (2018.3 webpack edition) can be found in the build folder.
+
 A link to the project planning interface (Notion) can be found [here.](https://boatneck-ping-f37.notion.site/Individual-Project-24f37a1b95bd4415b68c7d97c25824d7?pvs=4) It documents the journey so far!
 
 ### System Design Diagram:
