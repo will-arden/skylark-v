@@ -69,7 +69,6 @@ module control(
 // -------------- DECODER -------------- //
 
     decoder decoder(
-        branched_flag_F,                        // Inputs
         branch_E,
         N, Z,
         funct7b5_D,

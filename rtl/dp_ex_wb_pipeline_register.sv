@@ -6,7 +6,7 @@ module dp_ex_wb_pipeline_register(
                                 StallW,
                                 FlushW,
     input logic [4:0]           A3_E, A4_E,
-    input logic [31:0]          RD2_E,              // Write data to external memory, for SW operations
+    input logic [31:0]          OpB_E,              // Write data to external memory, for SW operations
                                 ALUResultE,
                                 PCNextE,
 
@@ -35,7 +35,7 @@ module dp_ex_wb_pipeline_register(
             else if(!StallW) begin
                 A3_W            <= A3_E;
                 A4_W            <= A4_E;
-                RD2_W           <= RD2_E;
+                RD2_W           <= OpB_E;
                 ALUResultW      <= ALUResultE;
                 PCNextW         <= PCNextE;
             end

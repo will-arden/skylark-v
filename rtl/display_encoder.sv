@@ -14,7 +14,8 @@ module display_encoder(
     assign wth = 4'h3;
 
     always_comb begin
-        anode <= 1'b0;
+        
+        /*anode <= 1'b0;
         case (wth)
             4'h0:       cathodes[6:0]   <= 7'b1000000;
             4'h1:       cathodes[6:0]   <= 7'b1111001;
@@ -33,7 +34,7 @@ module display_encoder(
             4'hE:       cathodes[6:0]   <= 7'b0000110;
             4'hF:       cathodes[6:0]   <= 7'b0001110;
             default:    cathodes[6:0]   <= 7'b1111111;
-        endcase
+        endcase*/
     end
 
     /*always_ff @(posedge clk, posedge reset) begin

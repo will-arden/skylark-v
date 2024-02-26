@@ -2,8 +2,7 @@
 
 module decoder(
     
-    input logic             branched_flag_F,
-                            branch_E,
+    input logic             branch_E,
                             N, Z,
                             funct7b5_D,
     input logic [2:0]       funct3_D,
@@ -40,7 +39,7 @@ module decoder(
             default:        control_signals <= 'x;                       // Invalid instruction (or not supported)
         endcase
         
-        if(!branch_D) begin
+        if(!branch_D && !control_signals[0]) begin
             unique case(funct3_D)
                 3'b000:         control_signals[3:1] <= (funct7b5_D && op_D==7'b0110011) ? 3'b001 : 3'b000;    // ADD/SUB operation
                 3'b010:         control_signals[3:1] <= 3'b001;                          // SLT operation

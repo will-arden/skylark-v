@@ -243,7 +243,7 @@ module datapath(
         StallW,
         FlushW,
         A3_E, A4_E,
-        RD2_E,
+        OpB_E,              // This becomes RD2_W, as it is the write data for SW operations
         ALUResultE,
         PCNextE,
         A3_W, A4_W,

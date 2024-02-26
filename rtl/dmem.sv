@@ -12,9 +12,18 @@ module dmem #(
 
     logic [31:0] data[MEM_SIZE-1:0];            // Create memory space
     
-    // Writing to external memory
-    always_ff @(posedge clk) begin
-        if(WE) data[A] <= WD;
+    integer i;
+    always_ff @(posedge clk, posedge reset) begin
+    
+        // Initialize RAM on reset
+        if(reset) begin
+            for(i=0; i<MEM_SIZE; i++) begin
+                data[i] <= 32'h00000000;
+            end
+        end
+        
+        // Writing to external memory
+        else if(WE)     data[A] <= WD;
     end
     
     // Reading from external memory
