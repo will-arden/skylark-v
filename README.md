@@ -17,7 +17,17 @@ A link to the project planning interface (Notion) can be found [here.](https://b
 * Write a sample program demonstrating convolution with and without the use of the BNN unit
 * Explore the benefits of a branch prediction unit
 
-### Changelog (v0.5.0)
+### Changelog (v0.5.1)
+* Fixed RAW hazard for store operations
+* Fixed issue in the `decoder` module which was leading to an incorrect data memory write address
+* Added a `clk_div` module for producing a low-speed clock signal, more suitable for FPGA demonstrations
+* 7-segment display for Basys 3 now working
+
+---
+
+### Previous versions
+
+#### Changelog (v0.5.0)
 * Created a `soc` module, which replaces the top level testbench for FPGA synthesis
   - Instantiated instruction memory and data memory
   - Proves functionality via two LEDs
@@ -29,10 +39,6 @@ A link to the project planning interface (Notion) can be found [here.](https://b
 #### Other minor changes
 * `display_encoder` module created but not used
 * `timescale` directive added to every module, based on guidance from Frank Bruno's book
-
----
-
-### Previous versions
 
 #### Changelog (v0.4.4)
 * Simplified the branch behaviour of the processor
