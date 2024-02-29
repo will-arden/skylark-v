@@ -1,0 +1,7 @@
+addi x1, x0, 0xCE
+addi x2, x0, 0x155
+addi x4, x0, 0xA
+bcnv x3, x1, x2
+bnn x4, x1, x2, 0x0
+
+
