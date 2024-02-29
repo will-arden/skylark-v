@@ -22,15 +22,26 @@ A link to the project planning interface (Notion) can be found [here.](https://b
 * Write a sample program demonstrating convolution with and without the use of the BNN unit
 * Explore the benefits of a branch prediction unit
 
-### Changelog (v0.5.1)
-* Fixed RAW hazard for store operations
-* Fixed issue in the `decoder` module which was leading to an incorrect data memory write address
-* Added a `clk_div` module for producing a low-speed clock signal, more suitable for FPGA demonstrations
-* 7-segment display for Basys 3 now working
+### Changelog (v0.6.0)
+* Updated `bnn` module and `tb_bnn`
+  - Included a configurable activation threshold, such that both the binarized convolution and the neuron activation may be calculated
+  - Contains a register which holds the `matrix_size` (default is 3x3=9), which may be written to by asserting `ms_WE`
+  - *XOR* result from the ALU is input, before being inverted within the `bnn` module (to get *XNOR*), in the interest of minimizing hardware
+  - Results verified with handwritten matrix convolution calculations
+* Updated the control logic to support the new *BNN instructions*:
+  - **Binarized Convolution** (`BCNV`) - R-type instruction which outputs the result of the matrix convolution
+  - **BNN Operation** (`BNN`) - S-type instruction which convolves the two matrices and applies the activation threshold specific to the instruction (immediate)
+  - **Configure Matrix Size** (`BNNCMS`) - I-type instruction which writes an immediate value to the `matrix_size` register in the `bnn` module
 
 ---
 
 ### Previous versions
+
+#### Changelog (v0.5.1)
+* Fixed RAW hazard for store operations
+* Fixed issue in the `decoder` module which was leading to an incorrect data memory write address
+* Added a `clk_div` module for producing a low-speed clock signal, more suitable for FPGA demonstrations
+* 7-segment display for Basys 3 now working
 
 #### Changelog (v0.5.0)
 * Created a `soc` module, which replaces the top level testbench for FPGA synthesis
