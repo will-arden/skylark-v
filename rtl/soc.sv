@@ -23,13 +23,13 @@ module soc(
     
 // -------------- CLOCK DIVIDER -------------- //
 
-clk_div clk_div(
-    CLK100MHZ, reset,
-    low_speed_clk
-);
+    clk_div clk_div(
+        CLK100MHZ, reset,
+        low_speed_clk
+    );
     
     // Map physical signals
-    assign clk          = low_speed_clk;
+    assign clk          = CLK100MHZ;
     assign reset        = btnC;
     assign seg          = cathodes;
     

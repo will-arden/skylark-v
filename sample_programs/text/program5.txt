@@ -1,0 +1,5 @@
+addi x1, x0, 0xa
+sw x1, 0(x0)
+nop
+nop
+nop

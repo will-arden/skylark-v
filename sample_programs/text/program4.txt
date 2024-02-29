@@ -1,0 +1,25 @@
+init:
+	addi x1, x0, 0xF
+digit1:
+	addi x2, x2, 1
+    sw x2, 0(x0)
+    bne x1, x2, digit1
+    addi x2, x0, 0
+digit2:
+	addi x2, x2, 1
+    sw x2, 1(x0)
+    bne x1, x2, digit2
+    addi x2, x0, 0
+digit3:
+	addi x2, x2, 1
+    sw x2, 2(x0)
+    bne x1, x2, digit3
+    addi x2, x0, 0
+digit4:
+	addi x2, x2, 1
+    sw x2, 3(x0)
+    bne x1, x2, digit4
+    addi x2, x0, 0
+    
+ terminate:
+ 	jal x0, terminate

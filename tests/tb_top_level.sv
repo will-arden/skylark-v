@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-`define IMEM_PATH "C:/Users/willa/skylark-v/user_data/program3.dat"
+`define IMEM_PATH "C:/Users/willa/skylark-v/user_data/program6.dat"
 `define IMEM_SIZE 32
 `define DMEM_SIZE 64
 
@@ -13,7 +13,7 @@ module tb_top_level;
     logic [31:0]    InstrF, ReadData;
     
     // Outputs from core
-    logic           MemWrite;
+    logic           MemWriteW;
     logic [31:0]    ALUResultW, WriteData, PCF;
 
     // Instantiate core
@@ -22,7 +22,7 @@ module tb_top_level;
         reset,
         InstrF,
         ReadData,
-        MemWrite,
+        MemWriteW,
         ALUResultW,
         WriteData,
         PCF
@@ -52,7 +52,7 @@ module tb_top_level;
 
     dmem #(`DMEM_SIZE) dmem(
         clk, reset,
-        MemWrite,
+        MemWriteW,
         ALUResultW,
         WriteData,
         ReadData
