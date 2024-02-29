@@ -16,7 +16,7 @@ A link to the project planning interface (Notion) can be found [here.](https://b
 ### To-do
 * Create a demo to show the efficiency of *skylark-v* compared to a single-cycle processor (from the Harris & Harris book)
 * Write a sample program demonstrating ML-related tasks with and without the use of the BNN unit
-* Updat the `bnn` module to allow for easy concatenation of BNN results:
+* Update the `bnn` module to allow for easy concatenation of BNN results:
   - Create an additional `bnn_index` register such that subsequent activations can be easily concatenated in the same destination register
   - Support a simple instruction to write to the `bnn_index` register, similar to `BNNCMS`
 * Explore the benefits of a branch prediction unit
