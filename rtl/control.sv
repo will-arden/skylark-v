@@ -13,6 +13,8 @@ module control(
     output logic                RegWE_E_E,              // Execute Register Write Enable                (Execute)
                                 RegWE_W_W,              //                                              (Writeback)
                                 OpBSrcE,                // Select ALU operand B source                  (Execute)
+                                en_threshold_E,         // Enable Activation Threshold for BNN unit     (Execute)
+                                ms_WE_E,                // Write Enable matrix_size for BNN unit        (Execute)
                                 StallF,
                                 StallD, FlushD,
                                 StallE, FlushE,
@@ -53,7 +55,9 @@ module control(
     logic           RegWE_E_D,
                     RegWE_W_D,
                     OpBSrcD,
-                    MemWriteD;
+                    MemWriteD,
+                    en_threshold_D,
+                    ms_WE_D;
     logic [1:0]     ExPathD;
     logic [2:0]     ALUFuncD;
 
@@ -79,6 +83,8 @@ module control(
         condition_met_E,
         OpBSrcD,
         MemWriteD,
+        en_threshold_D,
+        ms_WE_D,
         ExPathD,
         PCSrcE,
         ImmFormatD,
@@ -96,7 +102,10 @@ module control(
                     
 // -------------- DECODE-EXECUTE PIPELINE REGISTER -------------- //
 
-    logic       MemWriteE;
+    // Declare pipelined signals
+    logic       MemWriteE,
+                en_threshold_E,
+                ms_WE_E;
 
     c_id_ex_pipeline_register c_id_ex_pipeline_register(
         clk,
@@ -106,6 +115,8 @@ module control(
         RegWE_E_D, RegWE_W_D,           // Inputs to register
         OpBSrcD,
         MemWriteD,
+        en_threshold_D,
+        ms_WE_D,
         branch_D, jump_D,
         ExPathD,
         ALUFuncD,
@@ -113,6 +124,8 @@ module control(
         RegWE_E_E, RegWE_W_E,           // Outputs from register
         OpBSrcE,
         MemWriteE,
+        en_threshold_E,
+        ms_WE_E,
         branch_E, jump_E,
         ExPathE,
         ALUFuncE,

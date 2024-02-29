@@ -24,9 +24,11 @@ module skylark_core(
                     RegWE_W_E, RegWE_W_W,                   // Writeback Register Write Enable control bits
                     RegWE_W_W2;
     logic           condition_met_E,
-                    branch_D, jump_D,                       // Branch/Jump signals                  (Decode)
-                    branch_E, jump_E,                       //                                      (Execute)
-                    OpBSrcE;                                // ALU Operand B select bits
+                    branch_D, jump_D,                       // Branch/Jump signals                          (Decode)
+                    branch_E, jump_E,                       //                                              (Execute)
+                    OpBSrcE,                                // ALU Operand B select bits                    (Execute)
+                    en_threshold_E,                         // Enable activation threshold for BNN unit     (Execute)
+                    ms_WE_E;                                // Write Enable matrix_size for BNN unit        (Execute)
     logic [1:0]     PCSrcE;                                 // PC source select bit
     logic [1:0]     ExPathE,                                // Execute path to be used
                     ImmFormatD;                             // Immediate value format (not pipelined, as it is used in the same stage)
@@ -57,6 +59,8 @@ module skylark_core(
         InstrF,
         RegWE_E_E, RegWE_W_W,               // Outputs
         OpBSrcE,
+        en_threshold_E,
+        ms_WE_E,
         StallF,
         StallD, FlushD,
         StallE, FlushE,
@@ -80,6 +84,8 @@ module skylark_core(
         RegWE_E_E,                      // Internal inputs (from control)
         RegWE_W_W,
         OpBSrcE,
+        en_threshold_E,
+        ms_WE_E,
         PCSrcE,
         StallF,
         StallD,

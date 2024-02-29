@@ -10,6 +10,8 @@ module datapath(
     input logic                 RegWE_E_E,              // Execute Register Write Enable                (Execute)
                                 RegWE_W_W,              // Writeback Register Write Enable              (Writeback)
                                 OpBSrcE,                // Select ALU operand B source                  (Execute)
+                                en_threshold_E,         // Enable activation threshold (BNN unit)       (Execute)
+                                ms_WE_E,                // Write enable matrix_size (BNN unit)          (Execute)
     input logic [1:0]           PCSrcE,                 // Selects branch target address or +4          (Execute)
     input logic                 StallF,                 // Stalls the pipeline                          (Fetch)
                                 StallD,                 // Stalls the pipeline                          (Decode)
@@ -206,8 +208,15 @@ module datapath(
 // -------------- BNN UNIT -------------- //
 
     // BNN signals
-    logic [31:0] BNNResult;
-    assign BNNResult = 32'h00000000;
+    logic [31:0]    BNNResult;
+    bnn bnn(
+        clk, reset,
+        en_threshold_E,
+        ms_WE_E,
+        ExtImmE,
+        ALUResultE,
+        BNNResult
+    );
     
 // -------------- EXECUTE PATH SELECTOR -------------- //
 
@@ -216,7 +225,7 @@ module datapath(
 
     mux3to1 path_select(
         ALUResultE,                              // ALU path result
-        BNNResult,                              // BNN path result (FOR NOW, THIS IS ZERO)
+        BNNResult,                              // BNN path result
         PCNextE,                                // JAL path result
         ExPathE,                                // 2-bit signal selects between the above options
         ExResultE                               // Selected value, to be written to register file
