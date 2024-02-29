@@ -14,7 +14,10 @@ A link to the project planning interface (Notion) can be found [here.](https://b
 ---
 
 ### To-do
-* Update and instantiate the BNN module (and other necessary hardware), supporting the 3 proposed instructions (`BNN`, `BCNV` and `BNNCMS`)
+* Update and instantiate the BNN module (and other necessary hardware), supporting the 3 proposed instructions:
+  - BNN Activation Computation - `BNN`
+  - Binarized Convolution - `BCNV`
+  - Set the matrix size - `BNNCMS`
 * Create a demo to show the efficiency of *skylark-v* compared to a single-cycle processor (from the Harris & Harris book)
 * Write a sample program demonstrating convolution with and without the use of the BNN unit
 * Explore the benefits of a branch prediction unit
