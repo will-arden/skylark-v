@@ -22,19 +22,29 @@ A link to the project planning interface (Notion) can be found [here.](https://b
 * Explore the benefits of a branch prediction unit
 
 ### Changelog (v0.6.0)
+* Fixed `BNN` instruction (now R-type)
+* Added an additional *activation threshold* register in the `bnn` module (similar to `matrix_size`)
+* Added logic for an extra instruction (`BNNCAT`) to configure the activation threshold
+* Fixed a significant issue surrounding the load stall buffer (erroneous forwarding in some cases)
+* Created a new test program based on *Single-Layer Perceptron (SLP)*
+  - Identifies eight 1-bit 5x5 images as either *"mountains"* or *not "mountains"*
+  - A *"mountain"* is defined in a *"mountain definition"* image (a white triangle at the bottom of the image)
+  - Activation threshold set to 15 for optimal results (correctly identifies 8/8 test images)
+
+---
+
+### Previous versions
+
+#### Changelog (v0.6.0)
 * Updated `bnn` module and `tb_bnn`
   - Included a configurable activation threshold, such that both the binarized convolution and the neuron activation may be calculated
   - Contains a register which holds the `matrix_size` (default is 3x3=9), which may be written to by asserting `ms_WE`
   - *XOR* result from the ALU is input, before being inverted within the `bnn` module (to get *XNOR*), in the interest of minimizing hardware
   - Results verified with handwritten matrix convolution calculations
 * Updated the control logic to support the new *BNN instructions*:
-  - **Binarized Convolution** (`BCNV`) - R-type instruction which outputs the result of the matrix convolution
-  - **BNN Operation** (`BNN`) - S-type instruction which convolves the two matrices and applies the activation threshold specific to the instruction (immediate)
-  - **Configure Matrix Size** (`BNNCMS`) - I-type instruction which writes an immediate value to the `matrix_size` register in the `bnn` module
-
----
-
-### Previous versions
+  - **Binarized Convolution** (`BCNV`) - outputs the result of the matrix convolution
+  - **BNN Operation** (`BNN`) - convolves the two matrices and applies the activation threshold specific to the instruction (immediate)
+  - **Configure Matrix Size** (`BNNCMS`) - writes an immediate value to the `matrix_size` register in the `bnn` module
 
 #### Changelog (v0.5.1)
 * Fixed RAW hazard for store operations
