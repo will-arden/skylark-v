@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-`define IMEM_PATH "C:/Users/willa/skylark-v/user_data/program6.dat"
+`define IMEM_PATH "C:/Users/willa/skylark-v/user_data/program7.dat"
 `define IMEM_SIZE 32
 `define DMEM_SIZE 64
 
