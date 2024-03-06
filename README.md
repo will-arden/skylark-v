@@ -35,7 +35,7 @@ A link to the project planning interface (Notion) can be found [here.](https://b
 
 ### Previous versions
 
-#### Changelog (v0.6.0)
+#### Changelog (v0.6.1)
 * Updated `bnn` module and `tb_bnn`
   - Included a configurable activation threshold, such that both the binarized convolution and the neuron activation may be calculated
   - Contains a register which holds the `matrix_size` (default is 3x3=9), which may be written to by asserting `ms_WE`
