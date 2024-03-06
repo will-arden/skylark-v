@@ -12,6 +12,7 @@ module datapath(
                                 OpBSrcE,                // Select ALU operand B source                  (Execute)
                                 en_threshold_E,         // Enable activation threshold (BNN unit)       (Execute)
                                 ms_WE_E,                // Write enable matrix_size (BNN unit)          (Execute)
+                                at_WE_E,                // Write enable Activation Threshold            (Execute)
     input logic [1:0]           PCSrcE,                 // Selects branch target address or +4          (Execute)
     input logic                 StallF,                 // Stalls the pipeline                          (Fetch)
                                 StallD,                 // Stalls the pipeline                          (Decode)
@@ -30,10 +31,12 @@ module datapath(
     output logic [31:0]         ALUResultW, WD, PCF,
     
     // Outputs to internal devices (to control)
-    output logic                Z,
+    output logic                RegWE_W_W2,             // Load Stall Buffer
+                                Z,
                                 N,
     output logic [4:0]          A1_E, A2_E,             // Source registers (for HCU)                   (Execute)
-                                A3_W                    // Destination registers (for HCU)              (Writeback)
+                                A3_W,                   // Destination registers (for HCU)              (Writeback)
+                                A4_W2
 
 );
 
@@ -213,6 +216,7 @@ module datapath(
         clk, reset,
         en_threshold_E,
         ms_WE_E,
+        at_WE_E,
         ExtImmE,
         ALUResultE,
         BNNResult
@@ -240,8 +244,8 @@ module datapath(
                                                  
 */
 
-    logic               RegWE_W_W2;
-    logic [4:0]         A4_W2;
+    //logic               RegWE_W_W2;
+    //logic [4:0]         A4_W2;
     logic [31:0]        RD2_W, PCNextW;
                         
 // -------------- EXECUTE-WRITEBACK PIPELINE REGISTER -------------- //

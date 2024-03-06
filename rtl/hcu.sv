@@ -10,7 +10,7 @@ module hcu(
                         branch_D, jump_D,           // Branch and Jump flags            (Decode)
                         branch_E,                   //                                  (Execute)
     input logic [4:0]   A1_E, A2_E,
-                        A3_W,                       // Writeback destination register
+                        A3_W, A4_W2,                // Writeback destination register
     
     output logic        StallF,                     // Stall and Flush signals
                         StallD, FlushD,
@@ -38,9 +38,9 @@ module hcu(
         
         // Load stall buffer (forwarding)
         else if(RegWE_W_W2) begin                       // If the Writeback 2 contains a load operation
-            if(A1_E == A3_W)        fwdA_E <= 2'b10;        // Check if OpA requires the result
+            if(A1_E == A4_W2)        fwdA_E <= 2'b10;       // Check if OpA requires the result
             else                    fwdA_E <= 2'b00;
-            if(A2_E == A3_W)        fwdB_E <= 2'b10;        // Check if OpB requires the result
+            if(A2_E == A4_W2)        fwdB_E <= 2'b10;      // Check if OpB requires the result
             else                    fwdB_E <= 2'b00;
         end
         

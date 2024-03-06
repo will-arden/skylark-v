@@ -16,44 +16,48 @@ module decoder(
                             MemWriteD,
                             en_threshold_D,
                             ms_WE_D,
+                            at_WE_D,
     output logic [1:0]      ExPathD,
                             PCSrcE,
                             ImmFormatD,
     output logic [2:0]      ALUFuncD
     
 );
-                
-    assign branch_D         = (op_D == 7'b1100011) ? 1'b1 : 1'b0;           // Detect branch instruction
-    assign jump_D           = (op_D == 7'b1101111) ? 1'b1 : 1'b0;           // Detect jump instruction
+    
+    // Detect branch/jump instructions based on 7-bit opcode
+    assign branch_D         = (op_D == 7'b1100011) ? 1'b1 : 1'b0;
+    assign jump_D           = (op_D == 7'b1101111) ? 1'b1 : 1'b0;
 
     // Generate a vector of all the control signals (improves readability)
-    logic [14:0] control_signals;
+    logic [15:0] control_signals;
 
     always_comb begin
     
         // Check for custom BNN instructions
         if(op_D == 7'b1111111) begin                        // Unique opcode not found in other RISC-V instructions
             unique case(funct3_D)
-                3'b000:         control_signals <= 15'b1x_00_1_01_00_00_xxx_0;     // Set Matrix Size (BNNCMS)         (I-type)
-                3'b001:         control_signals <= 15'b00_10_0_01_00_00_100_0;     // Binarized Convolution (BCNV)     (R-type)
-                3'b010:         control_signals <= 15'b01_10_0_01_00_01_100_0;     // BNN Operation (BNN)              (S-type)
+                3'b000:         control_signals <= 16'b01x_00_1_01_00_00_000_0;     // Set Matrix Size (BNNCMS)             (I-type)
+                3'b001:         control_signals <= 16'b000_10_0_01_00_00_100_0;     // Binarized Convolution (BCNV)         (R-type)
+                3'b010:         control_signals <= 16'b001_10_0_01_00_01_100_0;     // BNN Operation (BNN)                  (R-type)
+                3'b011:         control_signals <= 16'b10x_00_1_01_00_00_000_0;     // Set Activation Threshold (BNNCAT)    (I-type)
+                default:        control_signals <= 'x;                              // Invalid instruction (or not supported)
             endcase
         end
         else begin
         
             // Checking 7-bit opcode
             unique case(op_D)
-                7'b0010011:     control_signals <= 15'b0x_10_1_00_00_00_xxx_0;  // I-type (not LOAD)
-                7'b0110011:     control_signals <= 15'b0x_10_0_00_00_00_xxx_0;  // R-type               (ImmFormatD is "don't care")
-                7'b0000011:     control_signals <= 15'b0x_01_1_00_00_00_000_0;  // LOAD instruction
-                7'b0100011:     control_signals <= 15'b0x_00_1_00_00_01_000_1;  // S-type
-                7'b1100011:     control_signals <= 15'b0x_00_0_00_xx_10_001_0;  // B-type
-                7'b1101111:     control_signals <= 15'b0x_10_0_10_01_11_000_0;  // J-type (not JALR)
+                7'b0010011:     control_signals <= 16'b00x_10_1_00_00_00_xxx_0;  // I-type (not LOAD)
+                7'b0110011:     control_signals <= 16'b00x_10_0_00_00_00_xxx_0;  // R-type               (ImmFormatD is "don't care")
+                7'b0000011:     control_signals <= 16'b00x_01_1_00_00_00_000_0;  // LOAD instruction
+                7'b0100011:     control_signals <= 16'b00x_00_1_00_00_01_000_1;  // S-type
+                7'b1100011:     control_signals <= 16'b00x_00_0_00_xx_10_001_0;  // B-type
+                7'b1101111:     control_signals <= 16'b00x_10_0_10_01_11_000_0;  // J-type (not JALR)
                 default:        control_signals <= 'x;                          // Invalid instruction (or not supported)
             endcase
             
             // Checking funct3_D if necessary to decipher the specific instruction
-            if(!branch_D && !control_signals[0]) begin                                      // Not necessary for branch/store instructions
+            if(!branch_D && !control_signals[0] && !control_signals[11]) begin  // Not necessary for branch/store/load instructions
                 unique case(funct3_D)
                     3'b000:         control_signals[3:1] <= (funct7b5_D && op_D==7'b0110011) ? 3'b001 : 3'b000; // ADD/SUB operation
                     3'b010:         control_signals[3:1] <= 3'b001;                                             // SLT operation
@@ -88,6 +92,7 @@ module decoder(
     end
     
     // Distribute Decode control signals based on the vector generated above
+    assign at_WE_D          = control_signals[15];
     assign ms_WE_D          = control_signals[14];
     assign en_threshold_D   = control_signals[13];
     assign RegWE_E_D        = control_signals[12];
