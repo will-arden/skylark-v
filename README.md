@@ -20,7 +20,7 @@ A link to the project planning interface (Notion) can be found [here.](https://b
   - Support a simple instruction to write to the `bnn_index` register, similar to `BNNCMS`
 * Explore the benefits of a branch prediction unit
 
-### Changelog (v0.6.0)
+### Changelog (v0.6.1)
 * Fixed `BNN` instruction (now R-type)
 * Added an additional *activation threshold* register in the `bnn` module (similar to `matrix_size`)
 * Added logic for an extra instruction (`BNNCAT`) to configure the activation threshold
@@ -35,7 +35,7 @@ A link to the project planning interface (Notion) can be found [here.](https://b
 
 ### Previous versions
 
-#### Changelog (v0.6.1)
+#### Changelog (v0.6.0)
 * Updated `bnn` module and `tb_bnn`
   - Included a configurable activation threshold, such that both the binarized convolution and the neuron activation may be calculated
   - Contains a register which holds the `matrix_size` (default is 3x3=9), which may be written to by asserting `ms_WE`
