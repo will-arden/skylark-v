@@ -1,0 +1,26 @@
+lw x1, 8(x0)
+lw x2, 9(x0)
+bnncms #25
+bnncat #15
+bnn x3, x1, x2
+
+lw x2, 10(x0)
+bnn x4, x1, x2
+
+lw x2, 11(x0)
+bnn x5, x1, x2
+
+lw x2, 12(x0)
+bnn x6, x1, x2
+
+lw x2, 13(x0)
+bnn x20, x1, x2
+
+lw x2, 14(x0)
+bnn x21, x1, x2
+
+lw x2, 15(x0)
+bnn x22, x1, x2
+
+lw x2, 16(x0)
+bnn x23, x1, x2
