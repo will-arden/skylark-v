@@ -28,7 +28,8 @@ module skylark_core(
                     branch_E, jump_E,                       //                                              (Execute)
                     OpBSrcE,                                // ALU Operand B select bits                    (Execute)
                     en_threshold_E,                         // Enable activation threshold for BNN unit     (Execute)
-                    ms_WE_E;                                // Write Enable matrix_size for BNN unit        (Execute)
+                    ms_WE_E,                                // Write Enable matrix_size for BNN unit        (Execute)
+                    at_WE_E;                                // Write Enable activation_threshold            (Execute)
     logic [1:0]     PCSrcE;                                 // PC source select bit
     logic [1:0]     ExPathE,                                // Execute path to be used
                     ImmFormatD;                             // Immediate value format (not pipelined, as it is used in the same stage)
@@ -43,7 +44,7 @@ module skylark_core(
     
     // Datapath signals
     logic Z, N;
-    logic [4:0] A1_E, A2_E, A3_W, A4_W;
+    logic [4:0] A1_E, A2_E, A3_W, A4_W, A4_W2;
     
 
     
@@ -55,12 +56,13 @@ module skylark_core(
         Z, N,
         RegWE_W_W2,
         A1_E, A2_E,
-        A3_W,
+        A3_W, A4_W2,
         InstrF,
         RegWE_E_E, RegWE_W_W,               // Outputs
         OpBSrcE,
         en_threshold_E,
         ms_WE_E,
+        at_WE_E,
         StallF,
         StallD, FlushD,
         StallE, FlushE,
@@ -86,6 +88,7 @@ module skylark_core(
         OpBSrcE,
         en_threshold_E,
         ms_WE_E,
+        at_WE_E,
         PCSrcE,
         StallF,
         StallD,
@@ -101,10 +104,12 @@ module skylark_core(
         ALUResultW,                     // External outputs
         WriteData,
         PCF,
-        Z,                              // Internal outputs (to control)
+        RegWE_W_W2,                     // Internal outputs (to control)
+        Z,
         N,
         A1_E, A2_E,
-        A3_W
+        A3_W,
+        A4_W2
     );
 
 endmodule

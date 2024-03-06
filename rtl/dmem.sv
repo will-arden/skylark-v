@@ -17,9 +17,23 @@ module dmem #(
     
         // Initialize RAM on reset
         if(reset) begin
+        
+            // Zero data at every address
             for(i=0; i<MEM_SIZE; i++) begin
-                data[i] <= 32'h00000000;
+                data[i] = 32'h00000000;
             end
+            
+            // Add any custom data on initialization
+            data[8]     = 32'h00023BFF;                     // Mountain Definition
+            data[9]     = 32'h000239DF;                     // mnt_test_A
+            data[10]    = 32'h000231DF;                     // mnt_test_B
+            data[11]    = 32'h000011DF;                     // mnt_test_C
+            data[12]    = 32'h000211CF;                     // mnt_test_D
+            data[13]    = 32'h01F71000;                     // false_test_A
+            data[14]    = 32'h01101011;                     // false_test_B
+            data[15]    = 32'h01FFB880;                     // false_test_C
+            data[16]    = 32'h01FFFFFF;                     // false_test_D
+            
         end
         
         // Writing to external memory

@@ -6,15 +6,16 @@ module control(
                                 Z, N,
                                 RegWE_W_W2,             // This control signal is input from the load stall buffer
     input [4:0]                 A1_E, A2_E,
-                                A3_W,
+                                A3_W, A4_W2,
     input logic [31:0]          InstrF,
     
     // Outputs to datapath
-    output logic                RegWE_E_E,              // Execute Register Write Enable                (Execute)
-                                RegWE_W_W,              //                                              (Writeback)
-                                OpBSrcE,                // Select ALU operand B source                  (Execute)
-                                en_threshold_E,         // Enable Activation Threshold for BNN unit     (Execute)
-                                ms_WE_E,                // Write Enable matrix_size for BNN unit        (Execute)
+    output logic                RegWE_E_E,              // Execute Register Write Enable                    (Execute)
+                                RegWE_W_W,              //                                                  (Writeback)
+                                OpBSrcE,                // Select ALU operand B source                      (Execute)
+                                en_threshold_E,         // Enable Activation Threshold for BNN unit         (Execute)
+                                ms_WE_E,                // Write Enable matrix_size for BNN unit            (Execute)
+                                at_WE_E,                // Write Enable Activation Threshold for BNN unit   (Execute)
                                 StallF,
                                 StallD, FlushD,
                                 StallE, FlushE,
@@ -57,7 +58,7 @@ module control(
                     OpBSrcD,
                     MemWriteD,
                     en_threshold_D,
-                    ms_WE_D;
+                    ms_WE_D, at_WE_D;
     logic [1:0]     ExPathD;
     logic [2:0]     ALUFuncD;
 
@@ -85,6 +86,7 @@ module control(
         MemWriteD,
         en_threshold_D,
         ms_WE_D,
+        at_WE_D,
         ExPathD,
         PCSrcE,
         ImmFormatD,
@@ -102,10 +104,7 @@ module control(
                     
 // -------------- DECODE-EXECUTE PIPELINE REGISTER -------------- //
 
-    // Declare pipelined signals
-    logic       MemWriteE,
-                en_threshold_E,
-                ms_WE_E;
+    logic       MemWriteE;
 
     c_id_ex_pipeline_register c_id_ex_pipeline_register(
         clk,
@@ -117,6 +116,7 @@ module control(
         MemWriteD,
         en_threshold_D,
         ms_WE_D,
+        at_WE_D,
         branch_D, jump_D,
         ExPathD,
         ALUFuncD,
@@ -126,6 +126,7 @@ module control(
         MemWriteE,
         en_threshold_E,
         ms_WE_E,
+        at_WE_E,
         branch_E, jump_E,
         ExPathE,
         ALUFuncE,
@@ -172,7 +173,7 @@ module control(
         branch_D, jump_D,
         branch_E,
         A1_E, A2_E,                     // Source registers
-        A3_W,                           // Destination registers (Execute and Writeback, respectively)
+        A3_W, A4_W2,                    // Destination registers (Execute and Writeback 2, respectively)
         StallF,                         // Outputs (Stall, Flush and Forwarding signals)
         StallD, FlushD,
         StallE, FlushE,
