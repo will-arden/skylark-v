@@ -1,7 +1,12 @@
 # skylark-v
 *skylark-v* is a lightweight and straightforward 4-stage [RISC-V](https://riscv.org/) processor, inspired by [RI5CY](https://www.pulp-platform.org/docs/ri5cy_user_manual.pdf) and implemented in SystemVerilog. The most notable feature of this design is the inclusion of a hardware acceleration unit for [Binarized Neural Network (BNN)](https://arxiv.org/abs/1603.05279) inference operations.  
 
-This university project is designed for the Digilent Basys 3 development board, and is compatible with the undivided 100MHz clock provided onboard. The IP, along with the constraint file and the zipped Vivado project (2018.3 webpack edition) can be found in the build folder.  
+This university project is designed for the Digilent Basys 3 development board, and is compatible with the undivided 100MHz clock provided onboard when the `bnn` module is ommitted (the popcount operation is expensive). The IP, along with the constraint file and the zipped Vivado project (2018.3 webpack edition) can be found in the build folder.
+
+### Demo:
+This short demo shows *skylark-v* on the Digilent Basys 3; the clock speed has been significantly reduced for demonstration purposes. The simple program (`skylark-v/sample_programs/program4.txt`) involves each digit counting to 15 (`0xF`), before sitting idle in an infinite *terminate* loop.  
+
+https://github.com/will-arden/skylark-v/assets/31668269/915a5bab-3a69-4408-a080-b200a94aae29
 
 In `tools/img_converter` there is a simple Python script which may be useful for easily converting a 1-bit PNG image to plain text (and vice versa) in order to store in program/data memory, and to provide some visual of any convolution operations. Opening up the file will reveal some important user-configurable variables. In order to use this Python script, the [Pillow](https://github.com/python-pillow/Pillow) package is required, which can be installed with `pip`.
 
