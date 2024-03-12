@@ -31,14 +31,39 @@ module bnn(
     logic [31:0] xnor_data;
     assign xnor_data = ~ALUResultE;           // XNOR computation
     
-    // Popcount operation
+    
+    // Popcount operation - Constraining to match Bit-Length
     logic [31:0] c;
+    //assign c = '0;
+    
+    logic [31:0] length_adjusted;
+    integer i;
+    
+    
+    always_comb begin
+        
+        // Popcount operation - length adjusting to match matrix size
+        for(i=0; i < 32; i++) begin
+            if(i < matrix_size)         length_adjusted[i] <= xnor_data[i];
+            else                        length_adjusted[i] <= 1'b0;
+        end
+        
+        // Popcount operation - main
+        c = '0;
+        for(i=0; i < 32; i++) begin
+            c += length_adjusted[i];
+        end
+    end
+    
+    
+    // Popcount operation
+    /*logic [31:0] c;
     always_comb begin
         c = '0;
         foreach(xnor_data[i]) begin
             if(i < matrix_size)         c += xnor_data[i];
         end
-    end
+    end*/
     
     // Activation threshold
     logic           [31:0] activation;

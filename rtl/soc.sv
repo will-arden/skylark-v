@@ -23,13 +23,13 @@ module soc(
     
 // -------------- CLOCK DIVIDER -------------- //
 
-    clk_div clk_div(
+    clk_div #(6250000) clk_div(
         CLK100MHZ, reset,
         low_speed_clk
     );
     
     // Map physical signals
-    assign clk          = CLK100MHZ;
+    assign clk          = low_speed_clk;
     assign reset        = btnC;
     assign seg          = cathodes;
     
@@ -67,7 +67,7 @@ module soc(
     assign PC = PCF;
     
     //Display PC on 4 7-segments       
-    always_ff @(posedge clk, posedge reset)
+    always_ff @(posedge CLK100MHZ, posedge reset)
         if (reset)
             refresh_count <= 0;
         else
