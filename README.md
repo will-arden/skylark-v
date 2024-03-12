@@ -25,7 +25,15 @@ A link to the project planning interface (Notion) can be found [here.](https://b
   - Support a simple instruction to write to the `bnn_index` register, similar to `BNNCMS`
 * Explore the benefits of a branch prediction unit
 
-### Changelog (v0.6.1)
+### Changelog (v0.6.2)
+* Fixed the 7-seg display issue with the low clock speed
+* Altered the `bnn` logic to marginally improve the timing with Vivado's synthesizer
+
+---
+
+### Previous versions
+
+#### Changelog (v0.6.1)
 * Fixed `BNN` instruction (now R-type)
 * Added an additional *activation threshold* register in the `bnn` module (similar to `matrix_size`)
 * Added logic for an extra instruction (`BNNCAT`) to configure the activation threshold
@@ -35,10 +43,6 @@ A link to the project planning interface (Notion) can be found [here.](https://b
   - A *"mountain"* is defined in a *"mountain definition"* image (a white triangle at the bottom of the image)
   - Activation threshold set to 15 for optimal results (correctly identifies 8/8 test images)
   - All images may be found in `skylark-v/sample_programs/mountains`
-
----
-
-### Previous versions
 
 #### Changelog (v0.6.0)
 * Updated `bnn` module and `tb_bnn`

@@ -212,6 +212,7 @@ module datapath(
 
     // BNN signals
     logic [31:0]    BNNResult;
+    assign BNNResult = '0;
     bnn bnn(
         clk, reset,
         en_threshold_E,
