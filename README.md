@@ -19,10 +19,10 @@ A link to the project planning interface (Notion) can be found [here.](https://b
 ---
 
 ### To-do
-* Create a demo to show the efficiency of *skylark-v* compared to a single-cycle processor (from the Harris & Harris book)
 * Update the `bnn` module to allow for easy concatenation of BNN results:
   - Create an additional `bnn_index` register such that subsequent activations can be easily concatenated in the same destination register
   - Support a simple instruction to write to the `bnn_index` register, similar to `BNNCMS`
+* Explore splitting the BNN unit across two pipeline stages (*Execute* and *Writeback*) as a means to make the full system functional at 100MHz
 * Explore the benefits of a branch prediction unit
 
 ### Changelog (v0.6.2)
