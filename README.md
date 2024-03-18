@@ -41,16 +41,25 @@ In the case of a `BNN` instruction, the popcount result is passed through an add
 * Update the `bnn` module to allow for easy concatenation of BNN results:
   - Create an additional `bnn_index` register such that subsequent activations can be easily concatenated in the same destination register
   - Support a simple instruction to write to the `bnn_index` register, similar to `BNNCMS`
-* Explore splitting the BNN unit across two pipeline stages (*Execute* and *Writeback*) as a means to make the full system functional at 100MHz
+* Compare the performance of *skylark-v* with and without the BNN unit
 * Explore the benefits of a branch prediction unit
 
-### Changelog (v0.6.2)
-* Fixed the 7-seg display issue with the low clock speed
-* Altered the `bnn` logic to marginally improve the timing with Vivado's synthesizer
+### Changelog (v0.7)
+* Split the BNN unit across two pipeline stages (*Execute* and *Writeback*) to reduce the critical path
+  - Now meets all timing constraints at 100MHz
+  - Popcount operation and activation threshold are computed in the *Writeback* stage
+  - Decode logic adjusted to allow `BNN` and `BCNV` instructions to write back from the final pipeline stage
+  - Multiplexer added in the *Writeback* stage to select between `ReadData` (from data memory) and `BNNResult` - `ExPathW` determines this selection
+* *Clocking Wizard* (Vivado IP) replaces the `clk_div` module as a more reliable and professional solution
+* Minor presentation adjustments
 
 ---
 
 ### Previous versions
+
+#### Changelog (v0.6.2)
+* Fixed the 7-seg display issue with the low clock speed
+* Altered the `bnn` logic to marginally improve the timing with Vivado's synthesizer
 
 #### Changelog (v0.6.1)
 * Fixed `BNN` instruction (now R-type)
