@@ -50,16 +50,6 @@ module soc(
         reset, locked,
         CLK100MHZ
     );
-   
-/* 
-// -------------- CLOCK DIVIDER -------------- //
-
-    clk_div #(6250000) clk_div(
-        CLK100MHZ, reset,
-        low_speed_clk
-    ); */
-    
-
     
 // -------------- DATA MEMORY -------------- //
     
