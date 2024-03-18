@@ -31,13 +31,9 @@ To go an extra step and calculate the activation of a neuron in this case is sim
 
 The BNN unit in *skylark-v* is split across two pipeline stages, in order to meet narrower timing constraints (otherwise it does not reach 100MHz). In the *Execute* stage, the ALU is recycled to perform an XOR computation, before passing this result to the BNN unit. The BNN unit first inverts the bits (to compute the *XNOR* of the operands) before zeroing some MSBs to ensure that the following popcount operation will only consider the bits that fall within the matrix size (which is configurable via the custom `BNNCMS` instruction).
 
-The length-adjusted XNOR result is pipelined, where it becomes an input to the BNN unit in the *Writeback* stage. In this second stage, the popcount operation is carried out using an adder tree. The result of the popcount is essentially the convolution of the two input matrices, and is written back to the general-purpose register file in the case of a `BCNV` instruction.
-
-Since a `0` is really representing (-1), 
+The length-adjusted XNOR result is pipelined, where it becomes an input to the BNN unit in the *Writeback* stage. In this second stage, the popcount operation is carried out using an adder tree. Since a `0` is really representing (-1), the result of the convolution between the two input matrices will be equal to `2*popcount - matrix_size`. This can be achieved simply with a logical shift and a binary subtraction. In the case of a `BCNV` instruction, this convolution result is written back to the general-purpose register file.
 
 In the case of a `BNN` instruction, the popcount result is passed through an additional *activation* stage, where it is compared with an activation threshold (configurable via the custom `BNNCAT` instruction); the binary result is then written back to the register file.
-
-
 
 ---
 
