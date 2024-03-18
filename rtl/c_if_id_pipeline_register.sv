@@ -20,7 +20,7 @@ module c_if_id_pipeline_register(
     output logic [6:0]          op_D
 );
     
-    always_ff @(posedge clk, posedge reset) begin
+    always_ff @(posedge clk, posedge reset) begin : seq_proc
         if(reset) begin
             funct7b5_D      <= 1'b0;
             funct3_D        <= 3'b000;

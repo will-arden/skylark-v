@@ -13,7 +13,7 @@ module lsb(
 
 );
 
-    always_ff @(posedge clk, posedge reset) begin
+    always_ff @(posedge clk, posedge reset) begin : seq_proc
         if(reset) begin
             RegWE_W_W2      <= 1'b0;
             A4_W2           <= 5'b00000;

@@ -14,6 +14,7 @@ module control(
                                 RegWE_W_W,              //                                                  (Writeback)
                                 OpBSrcE,                // Select ALU operand B source                      (Execute)
                                 en_threshold_E,         // Enable Activation Threshold for BNN unit         (Execute)
+                                en_threshold_W,         //                                                  (Writeback)
                                 ms_WE_E,                // Write Enable matrix_size for BNN unit            (Execute)
                                 at_WE_E,                // Write Enable Activation Threshold for BNN unit   (Execute)
                                 StallF,
@@ -23,6 +24,7 @@ module control(
     output logic [1:0]          fwdA_E, fwdB_E,
                                 PCSrcE,                 // Selects branch target address or +4          (Execute)         
                                 ExPathE,                // Select desired Execute stage path            (Execute)
+                                ExPathW,                //                                              (Writeback)
                                 ImmFormatD,             // Format of immediate value for Extend Unit    (Decode)
     output logic [2:0]          ALUFuncE,               // Controls the ALU's operation                 (Execute)
     
@@ -151,8 +153,12 @@ module control(
         FlushW,
         RegWE_E_E, RegWE_W_E,
         MemWriteE,
+        en_threshold_E,
+        ExPathE,
         RegWE_E_W, RegWE_W_W,
-        MemWriteW
+        MemWriteW,
+        en_threshold_W,
+        ExPathW
     );
     
 /*

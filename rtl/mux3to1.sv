@@ -10,7 +10,7 @@ module mux3to1 #(
 
 );
 
-    always_comb begin
+    always_comb begin : comb_proc
         case(sel)
             2'b00:          y = a;
             2'b01:          y = b;

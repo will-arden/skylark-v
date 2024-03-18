@@ -24,7 +24,7 @@ module register_file(
 // -------------- WRITE -------------- //
     
     integer i;
-    always_ff @(posedge clk, posedge reset) begin
+    always_ff @(posedge clk, posedge reset) begin : seq_proc
     
         if(reset) begin
             for(i=0; i<32; i=i+1)   data[i] <= 32'h00000000;                // Zero all registers on reset

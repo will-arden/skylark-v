@@ -31,14 +31,14 @@ module decoder(
     // Generate a vector of all the control signals (improves readability)
     logic [15:0] control_signals;
 
-    always_comb begin
+    always_comb begin : comb_proc
     
         // Check for custom BNN instructions
         if(op_D == 7'b1111111) begin                        // Unique opcode not found in other RISC-V instructions
             unique case(funct3_D)
                 3'b000:         control_signals <= 16'b01x_00_1_01_00_00_000_0;     // Set Matrix Size (BNNCMS)             (I-type)
-                3'b001:         control_signals <= 16'b000_10_0_01_00_00_100_0;     // Binarized Convolution (BCNV)         (R-type)
-                3'b010:         control_signals <= 16'b001_10_0_01_00_01_100_0;     // BNN Operation (BNN)                  (R-type)
+                3'b001:         control_signals <= 16'b000_01_0_01_00_00_100_0;     // Binarized Convolution (BCNV)         (R-type)
+                3'b010:         control_signals <= 16'b001_01_0_01_00_01_100_0;     // BNN Operation (BNN)                  (R-type)
                 3'b011:         control_signals <= 16'b10x_00_1_01_00_00_000_0;     // Set Activation Threshold (BNNCAT)    (I-type)
                 default:        control_signals <= 'x;                              // Invalid instruction (or not supported)
             endcase

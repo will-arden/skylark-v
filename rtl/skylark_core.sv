@@ -28,10 +28,11 @@ module skylark_core(
                     branch_E, jump_E,                       //                                              (Execute)
                     OpBSrcE,                                // ALU Operand B select bits                    (Execute)
                     en_threshold_E,                         // Enable activation threshold for BNN unit     (Execute)
+                    en_threshold_W,                         //                                              (Writeback)
                     ms_WE_E,                                // Write Enable matrix_size for BNN unit        (Execute)
                     at_WE_E;                                // Write Enable activation_threshold            (Execute)
     logic [1:0]     PCSrcE;                                 // PC source select bit
-    logic [1:0]     ExPathE,                                // Execute path to be used
+    logic [1:0]     ExPathE, ExPathW,                       // Execute path to be used
                     ImmFormatD;                             // Immediate value format (not pipelined, as it is used in the same stage)
     logic [2:0]     ALUFuncE;                               // ALU operation select bits
 
@@ -60,7 +61,7 @@ module skylark_core(
         InstrF,
         RegWE_E_E, RegWE_W_W,               // Outputs
         OpBSrcE,
-        en_threshold_E,
+        en_threshold_E, en_threshold_W,
         ms_WE_E,
         at_WE_E,
         StallF,
@@ -70,6 +71,7 @@ module skylark_core(
         fwdA_E, fwdB_E,
         PCSrcE,
         ExPathE,
+        ExPathW,
         ImmFormatD,
         ALUFuncE,
         MemWriteW
@@ -86,19 +88,14 @@ module skylark_core(
         RegWE_E_E,                      // Internal inputs (from control)
         RegWE_W_W,
         OpBSrcE,
-        en_threshold_E,
+        en_threshold_E, en_threshold_W,
         ms_WE_E,
         at_WE_E,
         PCSrcE,
-        StallF,
-        StallD,
-        StallE,
-        StallW,
-        FlushD,
-        FlushE,
-        FlushW,
+        StallF, StallD, StallE, StallW,
+        FlushD, FlushE, FlushW,
         fwdA_E, fwdB_E,
-        ExPathE,
+        ExPathE, ExPathW,
         ImmFormatD,
         ALUFuncE,
         ALUResultW,                     // External outputs
