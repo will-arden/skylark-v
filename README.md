@@ -1,7 +1,7 @@
 # skylark-v
 *skylark-v* is a lightweight and straightforward 4-stage [RISC-V](https://riscv.org/) processor, inspired by [RI5CY](https://www.pulp-platform.org/docs/ri5cy_user_manual.pdf) and implemented in SystemVerilog. The most notable feature of this design is the inclusion of a hardware acceleration unit for [Binarized Neural Network (BNN)](https://arxiv.org/abs/1603.05279) inference operations.  
 
-This university project is designed for the Digilent Basys 3 development board, and is compatible with the undivided 100MHz clock provided onboard when the `bnn` module is ommitted (the popcount operation is expensive). The IP, along with the constraint file and the zipped Vivado project (2018.3 webpack edition) can be found in the build folder.
+This university project is designed for the Digilent Basys 3 development board, and is compatible with the undivided 100MHz clock provided onboard. The IP, along with the constraint file and the zipped Vivado project (2018.3 webpack edition) can be found in the build folder.
 
 ### Demo:
 This short demo shows *skylark-v* on the Digilent Basys 3; the clock speed has been significantly reduced for demonstration purposes. The simple program (`skylark-v/sample_programs/program4.txt`) involves each digit counting to 15 (`0xF`), before sitting idle in an infinite *terminate* loop.  
@@ -15,6 +15,29 @@ A link to the project planning interface (Notion) can be found [here.](https://b
 ### System Design Diagram:
 ![Block_Diagram](https://github.com/will-arden/risc-v-core/blob/main/doc/block_diagram?raw=true)
 *Note: This is an outdated system diagram.*
+
+---
+
+### Why is the BNN unit useful?
+A very popular type of machine learning algorithm is a *Convolutional Neural Network (CNN)*; these are expensive to implement in a processor design, since they typically rely on a dedicated *Vector Register File (VRF)* and a *Multiply-Accumulate unit (MAC)*.
+
+One way to reduce the computation (and therefore simplify & speed-up the hardware) is to constrain the precision of the CNN to a lesser number of bits; this is known as a *Quantized Neural Network (QNN)*. Usually this quantization involves reducing the precision to 16 or 8 bits, while only a (relatively) small degree of accuracy is lost in the final result. Taking this concept to the extreme, one is able to represent every operand as a 1-bit integer; this is known as a *Binarized Neural Network (BNN)*.
+
+BNNs are extremely fast since meaningful computations can be carried out using individual logic gates. If we represent (-1) as `0`, and 1 as `1`, then an XNOR gate can be considered as a multiplier of two 1-bit numbers. To perform a binarized convolution of two 1-bit nxn matrices, an array of XNOR gates may be used to perform the element-wise multiplication, before these products are summed using a *popcount* operation (also known as a *1's count*).
+
+To go an extra step and calculate the activation of a neuron in this case is simple; since we are expecting a *binary* result, a step function should be used to calculate the activation of the neuron, with an appropriate *activation threshold*.
+
+### How does this processor implement the BNN unit?
+
+The BNN unit in *skylark-v* is split across two pipeline stages, in order to meet narrower timing constraints (otherwise it does not reach 100MHz). In the *Execute* stage, the ALU is recycled to perform an XOR computation, before passing this result to the BNN unit. The BNN unit first inverts the bits (to compute the *XNOR* of the operands) before zeroing some MSBs to ensure that the following popcount operation will only consider the bits that fall within the matrix size (which is configurable via the custom `BNNCMS` instruction).
+
+The length-adjusted XNOR result is pipelined, where it becomes an input to the BNN unit in the *Writeback* stage. In this second stage, the popcount operation is carried out using an adder tree. The result of the popcount is essentially the convolution of the two input matrices, and is written back to the general-purpose register file in the case of a `BCNV` instruction.
+
+Since a `0` is really representing (-1), 
+
+In the case of a `BNN` instruction, the popcount result is passed through an additional *activation* stage, where it is compared with an activation threshold (configurable via the custom `BNNCAT` instruction); the binary result is then written back to the register file.
+
+
 
 ---
 
