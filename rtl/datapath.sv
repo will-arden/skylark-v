@@ -11,6 +11,7 @@ module datapath(
                                 RegWE_W_W,              // Writeback Register Write Enable              (Writeback)
                                 OpBSrcE,                // Select ALU operand B source                  (Execute)
                                 en_threshold_E,         // Enable activation threshold (BNN unit)       (Execute)
+                                en_threshold_W,         //                                              (Writeback)
                                 ms_WE_E,                // Write enable matrix_size (BNN unit)          (Execute)
                                 at_WE_E,                // Write enable Activation Threshold            (Execute)
     input logic [1:0]           PCSrcE,                 // Selects branch target address or +4          (Execute)
@@ -24,6 +25,7 @@ module datapath(
     input logic [1:0]           fwdA_E,                 // Forward select for operand A                 (Execute)
                                 fwdB_E,                 // Forward select for operand B                 (Execute)
                                 ExPathE,                // Select desired Execute stage path            (Execute)
+                                ExPathW,                //                                              (Writeback)
                                 ImmFormatD,             // Format of immediate value for Extend Unit    (Decode)
     input logic [2:0]           ALUFuncE,               // Controls the ALU's operation                 (Execute)
     
@@ -210,16 +212,24 @@ module datapath(
     
 // -------------- BNN UNIT -------------- //
 
+/*
+    Note:   The BNN unit is split across two pipeline stages: Execute and Writeback. This is done
+            in an attempt to meet the timing constraints of the 100MHz Basys 3 clock.
+*/
+
     // BNN signals
-    logic [31:0]    BNNResult;
-    assign BNNResult = '0;
+    logic [31:0]    length_adjusted_E, length_adjusted_W,
+                    BNNResult;
     bnn bnn(
-        clk, reset,
+        clk, reset,                 // Inputs
         en_threshold_E,
+        en_threshold_W,
         ms_WE_E,
         at_WE_E,
         ExtImmE,
         ALUResultE,
+        length_adjusted_W,
+        length_adjusted_E,          // Outputs
         BNNResult
     );
     
@@ -259,15 +269,17 @@ module datapath(
         A3_E, A4_E,
         OpB_E,              // This becomes RD2_W, as it is the write data for SW operations
         ALUResultE,
+        length_adjusted_E,
         PCNextE,
         A3_W, A4_W,
         RD2_W,
         ALUResultW,
+        length_adjusted_W,
         PCNextW
     );
     
     assign WD       =   RD2_W;
-    assign WD4      =   ReadData;
+    assign WD4      =   (ExPathW[0] == 1'b0) ? ReadData : BNNResult;
     
 // -------------- LOAD STALL BUFFER -------------- //
     

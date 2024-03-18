@@ -24,7 +24,7 @@ module hcu(
     assign StallW = 1'b0;
     assign FlushW = 1'b0;
 
-    always_comb begin
+    always_comb begin : comb_proc
         
 // -------------- FORWARDING -------------- //
     

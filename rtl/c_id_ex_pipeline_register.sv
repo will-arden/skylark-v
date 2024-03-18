@@ -28,7 +28,7 @@ module c_id_ex_pipeline_register(
                             funct3_E
 );
     
-    always_ff @(posedge clk, posedge reset) begin
+    always_ff @(posedge clk, posedge reset) begin : seq_proc
         if(reset) begin
             RegWE_E_E           <= 1'b0;
             RegWE_W_E           <= 1'b0;

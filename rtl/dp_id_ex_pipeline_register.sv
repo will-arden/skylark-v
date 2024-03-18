@@ -21,7 +21,7 @@ module dp_id_ex_pipeline_register(
                                 ExtImmE
 );  
     
-    always_ff @(posedge clk, posedge reset) begin
+    always_ff @(posedge clk, posedge reset) begin : seq_proc
         if(reset) begin
             A1_E            <= 32'h00000000;
             A2_E            <= 32'h00000000;

@@ -14,7 +14,7 @@ module extend_unit(
     logic [12:0] unExt_13;
     logic [20:0] unExt_21;
 
-    always_comb begin
+    always_comb begin : comb_proc
         case(ImmFormatD)
             2'b00: begin                                                                        // I-type format
                 unExt_12 <= bits_in[31:20];                                                         // Bit swizzle

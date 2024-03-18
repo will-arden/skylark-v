@@ -16,7 +16,7 @@ module alu (
     assign s_OpB = (OpBSrcE) ? ExtImmE : OpB;       // Select between the two options for operand B
     
     // Look-up table for the ALU operation provided by the control
-    always_comb begin
+    always_comb begin : comb_proc
     
         logic [31:0] s_OpB_2s_complement;
         s_OpB_2s_complement = (s_OpB[31]) ? (~s_OpB + 1'b1) : s_OpB;

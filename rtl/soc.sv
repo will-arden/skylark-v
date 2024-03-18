@@ -21,17 +21,45 @@ module soc(
     logic [3:0]         bcd0, bcd1, bcd2, bcd3;
     logic [6:0]         cathodes;
     
+// -------------- CLOCKING WIZARD (VIVADO IP) -------------- //
+
+    // Declare signals
+    logic       clk_wzd_100,
+                clk_wzd_90,
+                clk_wzd_80,
+                clk_wzd_70,
+                clk_wzd_60,
+                clk_wzd_50,
+                clk_wzd_110,
+                reset, locked;
+                
+    // Map physical signals
+    assign clk          = clk_wzd_110;
+    assign reset        = btnC;
+    assign seg          = cathodes;
+
+    // Instantiate IP
+    clk_wiz_0 clk_wiz(
+        clk_wzd_100,
+        clk_wzd_90,
+        clk_wzd_80,
+        clk_wzd_70,
+        clk_wzd_60,
+        clk_wzd_50,
+        clk_wzd_110,
+        reset, locked,
+        CLK100MHZ
+    );
+   
+/* 
 // -------------- CLOCK DIVIDER -------------- //
 
     clk_div #(6250000) clk_div(
         CLK100MHZ, reset,
         low_speed_clk
-    );
+    ); */
     
-    // Map physical signals
-    assign clk          = low_speed_clk;
-    assign reset        = btnC;
-    assign seg          = cathodes;
+
     
 // -------------- DATA MEMORY -------------- //
     

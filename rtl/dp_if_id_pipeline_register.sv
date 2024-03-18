@@ -14,7 +14,7 @@ module dp_if_id_pipeline_register(
                                 PCNextD
 );
 
-    always_ff @(posedge clk, posedge reset) begin
+    always_ff @(posedge clk, posedge reset) begin : seq_proc
         if(reset) begin
             InstrD      <= 32'h00000013;            // Set for NOP
             PCD         <= 32'h00000000;

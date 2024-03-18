@@ -13,7 +13,7 @@ module pc(
                             
 );
 
-    always_ff @(posedge clk, posedge reset) begin
+    always_ff @(posedge clk, posedge reset) begin : seq_proc
         if(reset) begin
             PCF             <= 32'h00000000;                // Restart program from 0x0
        end
