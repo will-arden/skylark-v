@@ -40,6 +40,7 @@ The two matrix operands of a BNN operation include the input matrix (an image, *
 ---
 
 ### To-do
+* Support *load upper-immediate* (`LUI`) as a U-type instruction
 * Update the `bnn` module to allow for easy concatenation of BNN results:
   - Create an additional `bnn_index` register such that subsequent activations can be easily concatenated in the same destination register
   - Support a simple instruction to write to the `bnn_index` register, similar to `BNNCMS`
