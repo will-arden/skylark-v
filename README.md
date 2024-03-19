@@ -35,6 +35,8 @@ The length-adjusted XNOR result is pipelined, where it becomes an input to the B
 
 In the case of a `BNN` instruction, the popcount result is passed through an additional *activation* stage, where it is compared with an activation threshold (configurable via the custom `BNNCAT` instruction); the binary result is then written back to the register file.
 
+The two matrix operands of a BNN operation include the input matrix (an image, *x*), and the binary weights (*w*). If the model requires biases for each connection between neurons, then this does not require extra hardware; since biases result in adding some constant to the convolution result for each layer, the activation threshold can simply be offset by the same amount to achieve the equivalent behaviour.
+
 ---
 
 ### To-do
