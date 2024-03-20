@@ -32,9 +32,9 @@ module skylark_core(
                     ms_WE_E,                                // Write Enable matrix_size for BNN unit        (Execute)
                     at_WE_E;                                // Write Enable activation_threshold            (Execute)
     logic [1:0]     PCSrcE;                                 // PC source select bit
-    logic [1:0]     ExPathE, ExPathW,                       // Execute path to be used
-                    ImmFormatD;                             // Immediate value format (not pipelined, as it is used in the same stage)
-    logic [2:0]     ALUFuncE;                               // ALU operation select bits
+    logic [1:0]     ExPathE, ExPathW;                       // Execute path to be used
+    logic [2:0]     ImmFormatD,                             // Immediate value format (not pipelined, as it is used in the same stage)
+                    ALUFuncE;                               // ALU operation select bits
 
     // Stall & Flush signals for pipeline registers
     logic           StallF, StallD, StallE, StallW;

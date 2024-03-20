@@ -31,16 +31,16 @@ module soc(
                 clk_wzd_60,
                 clk_wzd_50,
                 clk_wzd_110,
-                reset, locked;
+                locked;
                 
     // Map physical signals
-    assign clk          = clk_wzd_110;
+    assign clk          = CLK100MHZ;
     assign reset        = btnC;
     assign seg          = cathodes;
 
     // Instantiate IP
     clk_wiz_0 clk_wiz(
-        clk_wzd_100,
+        clk_wzd_100,            // Do not use clk_wzd_100 - instead, use CLK100MHZ
         clk_wzd_90,
         clk_wzd_80,
         clk_wzd_70,

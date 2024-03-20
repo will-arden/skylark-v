@@ -26,8 +26,8 @@ module datapath(
                                 fwdB_E,                 // Forward select for operand B                 (Execute)
                                 ExPathE,                // Select desired Execute stage path            (Execute)
                                 ExPathW,                //                                              (Writeback)
-                                ImmFormatD,             // Format of immediate value for Extend Unit    (Decode)
-    input logic [2:0]           ALUFuncE,               // Controls the ALU's operation                 (Execute)
+    input logic [2:0]           ImmFormatD,             // Format of immediate value for Extend Unit    (Decode)
+                                ALUFuncE,               // Controls the ALU's operation                 (Execute)
     
     // Outputs to external devices
     output logic [31:0]         ALUResultW, WD, PCF,
@@ -184,7 +184,7 @@ module datapath(
     mux3to1 fwd_mux_a(
         RD1_E,                      // a
         ALUResultW,                 // b
-        ReadData2,                  // c
+        ReadData2,                  // c            // Output from Load Stall Buffer
         fwdA_E,                     // sel
         OpA_E                       // y
     );
@@ -192,7 +192,7 @@ module datapath(
     mux3to1 fwd_mux_b(
         RD2_E,                      // a
         ALUResultW,                 // b
-        ReadData2,                  // c
+        ReadData2,                  // c            // Output from Load Stall Buffer
         fwdB_E,                     // sel
         OpB_E                       // y
     );

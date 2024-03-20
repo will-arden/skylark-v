@@ -21,7 +21,7 @@ module alu (
         logic [31:0] s_OpB_2s_complement;
         s_OpB_2s_complement = (s_OpB[31]) ? (~s_OpB + 1'b1) : s_OpB;
     
-        case(ALUFuncE)
+        unique case(ALUFuncE)
             3'b000:     result = OpA + s_OpB;                                   // ADD (and I-type SUB)
             3'b001:     result = OpA - s_OpB;                                   // SUB (R-type only)
             3'b010:     result = OpA & s_OpB;                                   // AND
