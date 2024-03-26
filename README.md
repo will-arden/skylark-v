@@ -48,6 +48,7 @@ The two matrix operands of a BNN operation include the input matrix (an image, *
 * *Load Upper-Immediate* (`LUI`) instructions (U-type) are now supported
 * Latch in *Decode* stage removed
 * Due to minor changes in hardware, timing constraints for 100MHz are no longer met (improvement to come)
+* Added a basic Python script in `tools/bnn_instruction_hex` which converts a custom BNN instruction to machine code
 
 ---
 
