@@ -1,0 +1,38 @@
+init_master:
+  addi x1, x0, 0	/* Initialize image row base index */
+  addi x2, x0, 1	/* Initialize weights base index */
+  lsli x2, x2, 10	/* Shift left to become 1024 */
+  bnncms 32			/* Define the maximum matrix size */
+init_neuron:
+  lsli 
+  addi x3, x0, 31	/* Initialize loop counter (32 rows) */
+  addi x10, x0, 0	/* Initialize running total */
+
+/* Compute the next load of data */
+L1_part_neuron_calc:
+/* Load inputs and weights */
+  lw x4, 0(x1)		/* Load next pixels from RAM */
+  lw x5, 0(x2)		/* Load next weights from RAM */
+  addi x1, x1, 1	/* Increment image row index */
+  addi x2, x2, 1	/* Increment weights index */
+/* Compute running total of convolution results */
+  bcnv x9, x4, x5	/* Perform convolution */
+  add x10, x10, x9	/* Add to running total */
+/* Control the loop */
+  addi x3, x3, -1				/* Decrement loop counter */
+  beq x3, x0, activation		/* Proceed if done */
+  jal x0, L1_part_neuron_calc	/* Otherwise loop again */
+
+/* Apply the step function to compute the activation */
+activation:
+  addi x6, x0, 26			/* Set some threshold */
+  bge x10, x6, write_1		/* Check against result */
+write_0:
+  addi x11, x0, 0			/* Write 0 if less than */
+  jal x0, terminate			/* And finish execution */
+write_1:
+  addi x11, x0, 1			/* Otherwise write 1 */
+
+/* End of the program */
+terminate:
+  jal x31, terminate

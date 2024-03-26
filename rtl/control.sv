@@ -25,8 +25,8 @@ module control(
                                 PCSrcE,                 // Selects branch target address or +4          (Execute)         
                                 ExPathE,                // Select desired Execute stage path            (Execute)
                                 ExPathW,                //                                              (Writeback)
-                                ImmFormatD,             // Format of immediate value for Extend Unit    (Decode)
-    output logic [2:0]          ALUFuncE,               // Controls the ALU's operation                 (Execute)
+    output logic [2:0]          ImmFormatD,             // Format of immediate value for Extend Unit    (Decode)
+                                ALUFuncE,               // Controls the ALU's operation                 (Execute)
     
     // Outputs to external destinations
     output logic                MemWriteW

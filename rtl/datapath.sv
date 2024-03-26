@@ -26,8 +26,8 @@ module datapath(
                                 fwdB_E,                 // Forward select for operand B                 (Execute)
                                 ExPathE,                // Select desired Execute stage path            (Execute)
                                 ExPathW,                //                                              (Writeback)
-                                ImmFormatD,             // Format of immediate value for Extend Unit    (Decode)
-    input logic [2:0]           ALUFuncE,               // Controls the ALU's operation                 (Execute)
+    input logic [2:0]           ImmFormatD,             // Format of immediate value for Extend Unit    (Decode)
+                                ALUFuncE,               // Controls the ALU's operation                 (Execute)
     
     // Outputs to external devices
     output logic [31:0]         ALUResultW, WD, PCF,
@@ -184,7 +184,7 @@ module datapath(
     mux3to1 fwd_mux_a(
         RD1_E,                      // a
         ALUResultW,                 // b
-        ReadData2,                  // c
+        ReadData2,                  // c            // Output from Load Stall Buffer
         fwdA_E,                     // sel
         OpA_E                       // y
     );
@@ -192,7 +192,7 @@ module datapath(
     mux3to1 fwd_mux_b(
         RD2_E,                      // a
         ALUResultW,                 // b
-        ReadData2,                  // c
+        ReadData2,                  // c            // Output from Load Stall Buffer
         fwdB_E,                     // sel
         OpB_E                       // y
     );
@@ -214,12 +214,13 @@ module datapath(
 
 /*
     Note:   The BNN unit is split across two pipeline stages: Execute and Writeback. This is done
-            in an attempt to meet the timing constraints of the 100MHz Basys 3 clock.
+            in an attempt to reduce the critical path.
 */
 
     // BNN signals
-    logic [31:0]    length_adjusted_E, length_adjusted_W,
-                    BNNResult;
+    logic [2:0]     popcnt_lvl2_E[7:0], popcnt_lvl2_W[7:0];     // Popcount levels 1 & 2 are computed in the Execute stage
+    logic [31:0]    BNNResult;
+    
     bnn bnn(
         clk, reset,                 // Inputs
         en_threshold_E,
@@ -228,8 +229,8 @@ module datapath(
         at_WE_E,
         ExtImmE,
         ALUResultE,
-        length_adjusted_W,
-        length_adjusted_E,          // Outputs
+        popcnt_lvl2_W,
+        popcnt_lvl2_E,              // Outputs
         BNNResult
     );
     
@@ -255,8 +256,6 @@ module datapath(
                                                  
 */
 
-    //logic               RegWE_W_W2;
-    //logic [4:0]         A4_W2;
     logic [31:0]        RD2_W, PCNextW;
                         
 // -------------- EXECUTE-WRITEBACK PIPELINE REGISTER -------------- //
@@ -269,12 +268,12 @@ module datapath(
         A3_E, A4_E,
         OpB_E,              // This becomes RD2_W, as it is the write data for SW operations
         ALUResultE,
-        length_adjusted_E,
         PCNextE,
+        popcnt_lvl2_E,
+        popcnt_lvl2_W,
         A3_W, A4_W,
         RD2_W,
         ALUResultW,
-        length_adjusted_W,
         PCNextW
     );
     

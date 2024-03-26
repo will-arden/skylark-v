@@ -1,7 +1,7 @@
 # skylark-v
 *skylark-v* is a lightweight and straightforward 4-stage [RISC-V](https://riscv.org/) processor, inspired by [RI5CY](https://www.pulp-platform.org/docs/ri5cy_user_manual.pdf) and implemented in SystemVerilog. The most notable feature of this design is the inclusion of a hardware acceleration unit for [Binarized Neural Network (BNN)](https://arxiv.org/abs/1603.05279) inference operations.  
 
-This university project is designed for the Digilent Basys 3 development board, and is compatible with the undivided 100MHz clock provided onboard. The IP, along with the constraint file and the zipped Vivado project (2018.3 webpack edition) can be found in the build folder.
+This university project is designed for the Digilent Basys 3 development board. The IP, along with the constraint file and the zipped Vivado project (2018.3 webpack edition) can be found in the build folder.
 
 ### Demo:
 This short demo shows *skylark-v* on the Digilent Basys 3; the clock speed has been significantly reduced for demonstration purposes. The simple program (`skylark-v/sample_programs/program4.txt`) involves each digit counting to 15 (`0xF`), before sitting idle in an infinite *terminate* loop.  
@@ -40,14 +40,21 @@ The two matrix operands of a BNN operation include the input matrix (an image, *
 ---
 
 ### To-do
-* Support *load upper-immediate* (`LUI`) as a U-type instruction
-* Update the `bnn` module to allow for easy concatenation of BNN results:
-  - Create an additional `bnn_index` register such that subsequent activations can be easily concatenated in the same destination register
-  - Support a simple instruction to write to the `bnn_index` register, similar to `BNNCMS`
-* Compare the performance of *skylark-v* with and without the BNN unit
-* Explore the benefits of a branch prediction unit
+* Remove the activation step in the BNN unit
+* Rewrite the logic in the `decoder` module
+* Support `jalr` instructions for better programmability
 
-### Changelog (v0.7)
+### Changelog (v0.7.1)
+* *Load Upper-Immediate* (`LUI`) instructions (U-type) are now supported
+* Latch in *Decode* stage removed
+* Due to minor changes in hardware, timing constraints for 100MHz are no longer met (improvement to come)
+* Added a basic Python script in `tools/bnn_instruction_hex` which converts a custom BNN instruction to machine code
+
+---
+
+### Previous versions
+
+#### Changelog (v0.7)
 * Split the BNN unit across two pipeline stages (*Execute* and *Writeback*) to reduce the critical path
   - Now meets all timing constraints at 100MHz
   - Popcount operation and activation threshold are computed in the *Writeback* stage
@@ -55,10 +62,6 @@ The two matrix operands of a BNN operation include the input matrix (an image, *
   - Multiplexer added in the *Writeback* stage to select between `ReadData` (from data memory) and `BNNResult` - `ExPathW` determines this selection
 * *Clocking Wizard* (Vivado IP) replaces the `clk_div` module as a more reliable and professional solution
 * Minor presentation adjustments
-
----
-
-### Previous versions
 
 #### Changelog (v0.6.2)
 * Fixed the 7-seg display issue with the low clock speed
