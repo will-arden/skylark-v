@@ -38,6 +38,7 @@ module soc(
     assign reset        = btnC;
     assign seg          = cathodes;
 
+    
     // Instantiate IP
     clk_wiz_0 clk_wiz(
         clk_wzd_100,            // Do not use clk_wzd_100 - instead, use CLK100MHZ

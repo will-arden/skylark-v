@@ -14,7 +14,7 @@ module register_file(
 );
 
     logic [31:0] data[31:0];                            // 31 useable registers
-    assign data[5'b00000] = 32'h00000000;               // Hard-wire register x0 to #0
+    assign data[0] = 32'h00000000;               // Hard-wire register x0 to #0
     
 // -------------- READ -------------- //
     
@@ -27,7 +27,7 @@ module register_file(
     always_ff @(posedge clk, posedge reset) begin : seq_proc
     
         if(reset) begin
-            for(i=0; i<32; i=i+1)   data[i] <= 32'h00000000;                // Zero all registers on reset
+            for(i=1; i<32; i++)   data[i] <= 32'h00000000;                  // Zero all registers on reset
         end
         
         else if(clk) begin                                                  // Otherwise, write as normal

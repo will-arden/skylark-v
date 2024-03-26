@@ -42,6 +42,7 @@ module decoder(
                 3'b011:         control_signals <= 17'b10x_00_1_01_00_000_000_0;    // Set Activation Threshold (BNNCAT)    (I-type)
                 default:        control_signals <= 'x;                              // Invalid instruction (or not supported)
             endcase
+            condition_met_E <= 1'bx;
         end
         else begin
         
@@ -62,8 +63,10 @@ module decoder(
             if(!branch_D && !control_signals[0] && !control_signals[12] && !control_signals[6]) begin
                 unique case(funct3_D)
                     3'b000:         control_signals[3:1] <= (funct7b5_D && op_D==7'b0110011) ? 3'b001 : 3'b000; // ADD/SUB operation
+                    3'b001:         control_signals[3:1] <= 3'b110;                                             // SLL operation
                     3'b010:         control_signals[3:1] <= 3'b001;                                             // SLT operation
                     3'b100:         control_signals[3:1] <= 3'b100;                                             // XOR operation
+                    3'b101:         control_signals[3:1] <= 3'b111;                                             // SLR operation
                     3'b110:         control_signals[3:1] <= 3'b011;                                             // OR operation
                     3'b111:         control_signals[3:1] <= 3'b010;                                             // AND operation
                     default:        control_signals[3:1] <= 'x;                                                 // Invalid operation
@@ -72,7 +75,7 @@ module decoder(
             
             // Misprediction check
             if(branch_E) begin
-                unique case (funct3_E)
+                case (funct3_E)
                     3'b000:         condition_met_E <= Z;           // BEQ
                     3'b001:         condition_met_E <= !Z;          // BNE
                     3'b100:         condition_met_E <= N;           // BLT
@@ -80,6 +83,7 @@ module decoder(
                     default:        condition_met_E <= 1'bx;               // Invalid/unsupported instruction
                 endcase
             end
+            else                    condition_met_E <= 1'bx;
             
             // Check for misprediction
             if(branch_E && !condition_met_E)    control_signals[8:7] <= 2'b10;
