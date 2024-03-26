@@ -1,0 +1,290 @@
+/* Useful values for later use */
+init:
+  lw x1, 8(x0)		/* Load neuron weights from RAM */
+  addi x29, x0, -1	/* Save 0xFFFFFFFF into a register (bitmask) */
+  addi x27, x0, 15	/* Save the activation threshold */
+  addi x26, x0, 25	/* Save the matrix size */
+
+/* Get length adjustment bitmask */
+  slli x25, x29, 7	/* Shift 0xFFFFFFFF left by 7 bits */
+  srli x25, x25, 7	/* Shift it right again, leaving zeros at the MSBs */
+
+/*-------------- bnn x3, x1, x2 -------------- */
+bnn_1:
+  lw x2, 9(x0)
+  addi x16, x0, 0
+
+/* Compute XNOR */
+xnor_1:
+  xor x14, x1, x2	/* Do XOR of the two input matrices */
+  xor x14, x14, x29	/* Invert the bits to get XNOR */
+
+/* Length Adjust */
+  and x14, x14, x25
+
+/* Popcount Operation */
+popcnt_1:
+  andi x15, x14, 1	/* Check if the LSB is a 1 */
+  add x16, x16, x15	/* Add this to a running total */
+  srli x14, x14, 1	/* Logical shift right by 1 bit */
+  bne x14, x0, popcnt_1	/* Continue looping until the input is exhausted */
+
+/* Compute (2*popcount - matrix_size)*/
+  slli x16, x16, 1	/* Multiply by 2 */
+  addi x16, x16, -25	/* Subtract matrix_size */
+
+/* Compute the activation (step function) */
+bge x16, x27, hi_activation_1
+
+lo_activation_1:
+  addi x3, x0, 0
+  jal x0, bnn_2
+
+hi_activation_1:
+  addi x3, x0, 1
+
+/* -------------- bnn x4, x1, x2 -------------- */
+bnn_2:
+  lw x2, 10(x0)
+  addi x16, x0, 0
+
+/* Compute XNOR */
+xnor_2:
+  xor x14, x1, x2	/* Do XOR of the two input matrices */
+  xor x14, x14, x29	/* Invert the bits to get XNOR */
+
+/* Length Adjust */
+  and x14, x14, x25
+
+/* Popcount Operation */
+popcnt_2:
+  andi x15, x14, 1	/* Check if the LSB is a 1 */
+  add x16, x16, x15	/* Add this to a running total */
+  srli x14, x14, 1	/* Logical shift right by 1 bit */
+  bne x14, x0, popcnt_2	/* Continue looping until the input is exhausted */
+
+/* Compute (2*popcount - matrix_size) */
+  slli x16, x16, 1	/* Multiply by 2 */
+  addi x16, x16, -25	/* Subtract matrix_size */
+
+/* Compute the activation (step function) */
+bge x16, x27, hi_activation_2
+
+lo_activation_2:
+  addi x4, x0, 0
+  jal x0, bnn_3
+
+hi_activation_2:
+  addi x4, x0, 1
+
+/* -------------- bnn x5, x1, x2 -------------- */
+bnn_3:
+  lw x2, 11(x0)
+  addi x16, x0, 0
+
+/* Compute XNOR */
+xnor_3:
+  xor x14, x1, x2	/* Do XOR of the two input matrices */
+  xor x14, x14, x29	/* Invert the bits to get XNOR */
+
+/* Length Adjust */
+  and x14, x14, x25
+
+/* Popcount Operation */
+popcnt_3:
+  andi x15, x14, 1	/* Check if the LSB is a 1 */
+  add x16, x16, x15	/* Add this to a running total */
+  srli x14, x14, 1	/* Logical shift right by 1 bit */
+  bne x14, x0, popcnt_3	/* Continue looping until the input is exhausted */
+
+/* Compute (2*popcount - matrix_size) */
+  slli x16, x16, 1	/* Multiply by 2 */
+  addi x16, x16, -25	/* Subtract matrix_size */
+
+/* Compute the activation (step function) */
+bge x16, x27, hi_activation_3
+
+lo_activation_3:
+  addi x5, x0, 0
+  jal x0, bnn_4
+
+hi_activation_3:
+  addi x5, x0, 1
+
+
+/* -------------- bnn x6, x1, x2 -------------- */
+bnn_4:
+  lw x2, 12(x0)
+  addi x16, x0, 0
+
+/* Compute XNOR */
+xnor_4:
+  xor x14, x1, x2	/* Do XOR of the two input matrices */
+  xor x14, x14, x29	/* Invert the bits to get XNOR */
+
+/* Length Adjust */
+  and x14, x14, x25
+
+/* Popcount Operation */
+popcnt_4:
+  andi x15, x14, 1	/* Check if the LSB is a 1 */
+  add x16, x16, x15	/* Add this to a running total */
+  srli x14, x14, 1	/* Logical shift right by 1 bit */
+  bne x14, x0, popcnt_4	/* Continue looping until the input is exhausted */
+
+/* Compute (2*popcount - matrix_size) */
+  slli x16, x16, 1	/* Multiply by 2 */
+  addi x16, x16, -25	/* Subtract matrix_size */
+
+/* Compute the activation (step function) */
+bge x16, x27, hi_activation_4
+
+lo_activation_4:
+  addi x6, x0, 0
+  jal x0, bnn_5
+
+hi_activation_4:
+  addi x6, x0, 1
+
+
+/* -------------- bnn x20, x1, x2 -------------- */
+bnn_5:
+  lw x2, 13(x0)
+  addi x16, x0, 0
+
+/* Compute XNOR */
+xnor_5:
+  xor x14, x1, x2	/* Do XOR of the two input matrices */
+  xor x14, x14, x29	/* Invert the bits to get XNOR */
+
+/* Length Adjust */
+  and x14, x14, x25
+
+/* Popcount Operation */
+popcnt_5:
+  andi x15, x14, 1	/* Check if the LSB is a 1 */
+  add x16, x16, x15	/* Add this to a running total */
+  srli x14, x14, 1	/* Logical shift right by 1 bit */
+  bne x14, x0, popcnt_5	/* Continue looping until the input is exhausted */
+
+/* Compute (2*popcount - matrix_size) */
+  slli x16, x16, 1	/* Multiply by 2 */
+  addi x16, x16, -25	/* Subtract matrix_size */
+
+/* Compute the activation (step function) */
+bge x16, x27, hi_activation_5
+
+lo_activation_5:
+  addi x20, x0, 0
+  jal x0, bnn_6
+
+hi_activation_5:
+  addi x20, x0, 1
+
+/* -------------- bnn x21, x1, x2 -------------- */
+bnn_6:
+  lw x2, 14(x0)
+  addi x16, x0, 0
+
+/* Compute XNOR */
+xnor_6:
+  xor x14, x1, x2	/* Do XOR of the two input matrices */
+  xor x14, x14, x29	/* Invert the bits to get XNOR */
+
+/* Length Adjust */
+  and x14, x14, x25
+
+/* Popcount Operation */
+popcnt_6:
+  andi x15, x14, 1	/* Check if the LSB is a 1 */
+  add x16, x16, x15	/* Add this to a running total */
+  srli x14, x14, 1	/* Logical shift right by 1 bit */
+  bne x14, x0, popcnt_6	/* Continue looping until the input is exhausted */
+
+/* Compute (2*popcount - matrix_size) */
+  slli x16, x16, 1	/* Multiply by 2 */
+  addi x16, x16, -25	/* Subtract matrix_size */
+
+/* Compute the activation (step function) */
+bge x16, x27, hi_activation_6
+
+lo_activation_6:
+  addi x21, x0, 0
+  jal x0, bnn_7
+
+hi_activation_6:
+  addi x21, x0, 1
+
+/* -------------- bnn x22, x1, x2 -------------- */
+bnn_7:
+  lw x2, 15(x0)
+  addi x16, x0, 0
+
+/* Compute XNOR */
+xnor_7:
+  xor x14, x1, x2	/* Do XOR of the two input matrices */
+  xor x14, x14, x29	/* Invert the bits to get XNOR */
+
+/* Length Adjust */
+  and x14, x14, x25
+
+/* Popcount Operation */
+popcnt_7:
+  andi x15, x14, 1	/* Check if the LSB is a 1 */
+  add x16, x16, x15	/* Add this to a running total */
+  srli x14, x14, 1	/* Logical shift right by 1 bit */
+  bne x14, x0, popcnt_7	/* Continue looping until the input is exhausted */
+
+/* Compute (2*popcount - matrix_size) */
+  slli x16, x16, 1	/* Multiply by 2 */
+  addi x16, x16, -25	/* Subtract matrix_size */
+
+/* Compute the activation (step function) */
+bge x16, x27, hi_activation_7
+
+lo_activation_7:
+  addi x22, x0, 0
+  jal x0, bnn_8
+
+hi_activation_7:
+  addi x22, x0, 1
+
+/* -------------- bnn x23, x1, x2 -------------- */
+bnn_8:
+  lw x2, 16(x0)
+  addi x16, x0, 0
+
+/* Compute XNOR */
+xnor_8:
+  xor x14, x1, x2	/* Do XOR of the two input matrices */
+  xor x14, x14, x29	/* Invert the bits to get XNOR */
+
+/* Length Adjust */
+  and x14, x14, x25
+
+/* Popcount Operation */
+popcnt_8:
+  andi x15, x14, 1	/* Check if the LSB is a 1 */
+  add x16, x16, x15	/* Add this to a running total */
+  srli x14, x14, 1	/* Logical shift right by 1 bit */
+  bne x14, x0, popcnt_8	/* Continue looping until the input is exhausted */
+
+/* Compute (2*popcount - matrix_size) */
+  slli x16, x16, 1	/* Multiply by 2 */
+  addi x16, x16, -25	/* Subtract matrix_size */
+
+/* Compute the activation (step function) */
+bge x16, x27, hi_activation_8
+
+lo_activation_8:
+  addi x23, x0, 0
+  jal x0, terminate
+
+hi_activation_8:
+  addi x23, x0, 1
+
+/* -------------- END OF PROGRAM -------------- */
+
+terminate:
+  jal x31, terminate
+

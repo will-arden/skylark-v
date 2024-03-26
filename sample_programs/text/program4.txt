@@ -16,7 +16,7 @@ digit3:
     bne x1, x2, digit3
     addi x2, x0, 0
 digit4:
-	addi x2, x2, 1
+    addi x2, x2, 1
     sw x2, 3(x0)
     bne x1, x2, digit4
     addi x2, x0, 0
