@@ -20,7 +20,7 @@ def decode(text):
     if(fields[0] == "bnn"):
         funct3 = "010"
     elif(fields[0] == "bcnv"):
-        funct3 = "010"
+        funct3 = "001"
     else:
         print("Invalid instruction. '"+fields[0]+"' needs rd, rs1 and rs2.")
         return
