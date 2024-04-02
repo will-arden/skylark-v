@@ -40,19 +40,28 @@ The two matrix operands of a BNN operation include the input matrix (an image, *
 ---
 
 ### To-do
-* Remove the activation step in the BNN unit
+* Support the `jalr` instruction such that program function returns are possible
 * Rewrite the logic in the `decoder` module
-* Support `jalr` instructions for better programmability
 
-### Changelog (v0.7.1)
-* *Load Upper-Immediate* (`LUI`) instructions (U-type) are now supported
-* Latch in *Decode* stage removed
-* Due to minor changes in hardware, timing constraints for 100MHz are no longer met (improvement to come)
-* Added a basic Python script in `tools/bnn_instruction_hex` which converts a custom BNN instruction to machine code
+### Changelog (v0.8)
+* The BNN unit has been shortened to exclude the activation step
+  - Reduces hardware that will probably be useless in realistic applications where the image size may be greater than 32
+  - Activation computation can still be easily achieved using the `bcnv` instruction, followed by conditional branches
+* The *Hazard Control Unit* has been updated:
+  - To fix bugs introduced by the pipelined BNN unit (which now writes back in the final stage)
+  - To fix a bug where branches would always be taken if they were being decoded whilst a stall/flush was occurring
+* The *Load Stall Buffer* now holds `ExPathW2` and `BNNResultW2`, the latter of which is used for forwarding
+* `bnn_instruction_hex.py` has been tweaked to ensure `bcnv` operations have the correct `funct3` bits
 
 ---
 
 ### Previous versions
+
+#### Changelog (v0.7.1)
+* *Load Upper-Immediate* (`LUI`) instructions (U-type) are now supported
+* Latch in *Decode* stage removed
+* Due to minor changes in hardware, timing constraints for 100MHz are no longer met (improvement to come)
+* Added a basic Python script in `tools/bnn_instruction_hex` which converts a custom BNN instruction to machine code
 
 #### Changelog (v0.7)
 * Split the BNN unit across two pipeline stages (*Execute* and *Writeback*) to reduce the critical path
