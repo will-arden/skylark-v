@@ -14,7 +14,6 @@ A link to the project planning interface (Notion) can be found [here.](https://b
 
 ### System Design Diagram:
 ![Block_Diagram](https://github.com/will-arden/risc-v-core/blob/main/doc/Processor_Design?raw=true)
-*Note: This is an outdated system diagram.*
 
 ---
 
