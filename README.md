@@ -42,6 +42,8 @@ The two matrix operands of a BNN operation include the input matrix (an image, *
 ### To-do
 * Support the `jalr` instruction such that program function returns are possible
 * Rewrite the logic in the `decoder` module
+* Remove the `BNNResult` signal from the *Execute* write path multiplexer
+* Update the *Load-Stall Buffer* such that it only stores one 32-bit value at a time
 
 ### Changelog (v0.8)
 * The BNN unit has been shortened to exclude the activation step
