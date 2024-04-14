@@ -13,7 +13,7 @@ In `tools/img_converter` there is a simple Python script which may be useful for
 A link to the project planning interface (Notion) can be found [here.](https://boatneck-ping-f37.notion.site/Individual-Project-24f37a1b95bd4415b68c7d97c25824d7?pvs=4) It documents the journey so far!
 
 ### System Design Diagram:
-![Block_Diagram](https://github.com/will-arden/risc-v-core/blob/main/doc/block_diagram?raw=true)
+![Block_Diagram](https://github.com/will-arden/risc-v-core/blob/main/doc/Processor_Design?raw=true)
 *Note: This is an outdated system diagram.*
 
 ---
