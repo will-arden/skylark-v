@@ -1,0 +1,56 @@
+_reset:
+  jal x0, main				/* Jump to main() */
+  
+/* -------------- FUNCTION TABLE -------------- */
+
+nextImg:
+  addi x13, x0, 0			/* Reset the running total */
+  lw x12, 0(x10)			/* Load the nth image */
+  
+/* Compute length-adjusted XNOR */
+  xor x20, x12, x11			/* First, XOR the data */
+  xor x20, x20, x7			/* Invert every bit to get XNOR */
+  and x20, x20, x6			/* Length adjust using bitmask */
+
+/* Popcount Operation */
+popcnt:
+  andi x21, x20, 1			/* Check if the LSB is a 1 */
+  add x13, x13, x21			/* Add this to a running total */
+  srli x20, x20, 1			/* Shift the XNOR result right by 1 */
+  bne x20, x0, popcnt			/* Loop until nothing remains */
+
+/* Compute: (2*popcount) - matrix_size */
+  slli x13, x13, 1			/* Multiply by 2 */
+  addi x13, x13, -25			/* Subtract matrix_size */
+
+  bge x13, x9, activate			/* Compare against threshold */
+  addi x14, x0, 0				/* Deactivate */
+  jal x0, nextImg_ret				/* Leap-frog over */
+activate:
+  addi x14, x0, 1				/* Activate */
+  sw x10, 0(x8)					/* Store index of positive results */
+  addi x8, x8, 1				/* Increment pointer */
+nextImg_ret:
+  jalr x0, x1, 0			/* Function return */
+
+/* -------------- MAIN PROGRAM -------------- */
+main:
+  addi x8, x0, 15			/* Pointer to positive results */
+  addi x9, x0, 15			/* Set activation threshold */
+
+/* Get length adjustment bitmask */
+  addi x7, x0, -1			/* Load 0xFFFFFFFF into a register */
+  slli x6, x7, 7			/* Shift left by 7 bits */
+  srli x6, x6, 7			/* Shift right again, leaving 0s at MSBs */
+
+  addi x10, x0, 8			/* Initialize the counter */
+  lw x11, 0(x0)				/* Load mountain definition */
+loop:
+  jal x1, nextImg			/* Process next image */
+  addi x10, x10, -1			/* Decrement loop counter */
+  beq x0, x10, terminate		/* Terminate if done */
+  jal x0, loop				/* Otherwise, loop again */
+
+terminate:				/* Sit in endless loop */
+  jal x0, terminate
+  
