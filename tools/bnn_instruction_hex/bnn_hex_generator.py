@@ -21,6 +21,8 @@ def decode(text):
         funct3 = "010"
     elif(fields[0] == "bcnv"):
         funct3 = "001"
+    elif(fields[0] == "bnncms"):
+        funct3 = "000"
     else:
         print("Invalid instruction. '"+fields[0]+"' needs rd, rs1 and rs2.")
         return
@@ -56,6 +58,27 @@ def decode(text):
         # Get hexadecimal
         instr_hex = hex(int(instr_bin, 2))[2:].zfill(8)
         print(instr_hex)
+
+    elif(fields[0] == "bnncms"):
+        if(len(fields) == 2):
+            imm     = int(fields[1])
+            imm_bin = (bin(imm)[2:]).zfill(12)
+
+            # Populate binary machine code
+            instr_bin = ['0'] * 32
+            instr_bin[25:32] = OPCODE
+            instr_bin[17:20] = funct3
+            instr_bin[0:12] = imm_bin
+            instr_bin = ''.join(instr_bin)
+            print(instr_bin)
+
+            # Get hexadecimal
+            instr_hex = hex(int(instr_bin, 2))[2:].zfill(8)
+            print(instr_hex)
+
+        else:
+            print("Invalid instruction. '"+fields[0]+"' needs only an immediate.")
+            return
 
     else:
         print("This instruction is not supported. Please refer to github.com/will-arden/skylark-v for more information.")

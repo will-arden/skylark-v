@@ -1,13 +1,14 @@
 `timescale 1ns / 1ps
 
-`define IMEM_SIZE 32
+`define IMEM_SIZE 64
 `define DMEM_SIZE 64
 
-localparam SEG_MEM_MAP = int'(32'h00000000);
+localparam SEG_MEM_MAP = 15;
 
 module soc(
 
     input logic             CLK100MHZ, btnC,
+    input logic  [15:0]     sw,
     output logic [3:0]      an,
     output logic [6:0]      seg,
     output logic [15:0]     LED
@@ -34,9 +35,10 @@ module soc(
                 locked;
                 
     // Map physical signals
-    assign clk          = CLK100MHZ;
+    assign clk          = clk_wzd_70;
     assign reset        = btnC;
     assign seg          = cathodes;
+    assign LED          = sw;
 
     
     // Instantiate IP
@@ -64,6 +66,17 @@ module soc(
         // Zero all RAM on reset
         if(reset) begin
             for(i=0; i<`DMEM_SIZE; i=i+1)       data[i] <= 32'h00000000;
+            
+            // Add any custom data on initialization
+            data[0]     = 32'h00023BFF;                     // Mountain Definition
+            data[1]     = 32'h000239DF;                     // mnt_test_A
+            data[2]    = 32'h000231DF;                     // mnt_test_B
+            data[3]    = 32'h000011DF;                     // mnt_test_C
+            data[4]    = 32'h000211CF;                     // mnt_test_D
+            data[5]    = 32'h01F71000;                     // false_test_A
+            data[6]    = 32'h01101011;                     // false_test_B
+            data[7]    = 32'h01FFB880;                     // false_test_C
+            data[8]    = 32'h01FFFFFF;                     // false_test_D
         end
         
         else if(MemWriteW)      data[ALUResultW] <= WriteData;
@@ -124,37 +137,25 @@ module soc(
         if(reset)       seg = 7'b0111111;
         else begin
             case (BCD)			//GFEDCBA
-                4'h0:    seg = 7'b1000000; // 0
-                4'h1:    seg = 7'b1111001; // 1
-                4'h2:    seg = 7'b0100100; // 2
-                4'h3:    seg = 7'b0110000; // 3
-                4'h4:    seg = 7'b0011001; // 4
-                4'h5:    seg = 7'b0010010; // 5
-                4'h6:    seg = 7'b0000010; // 6
-                4'h7:    seg = 7'b1111000; // 7
-                4'h8:    seg = 7'b0000000; // 8
-                4'h9:    seg = 7'b0010000; // 9
-                4'hA:    seg = 7'b0001000; // A
-                4'hB:    seg = 7'b0000011; // B
-                4'hC:    seg = 7'b0100111; // C
-                4'hD:    seg = 7'b0100001; // D
-                4'hE:    seg = 7'b0000110; // E
-                4'hF:    seg = 7'b0001110; // F
+                4'h0:   seg = 7'b1000000; // 0
+                4'h1:   seg = 7'b1111001; // 1
+                4'h2:   seg = 7'b0100100; // 2
+                4'h3:   seg = 7'b0110000; // 3
+                4'h4:   seg = 7'b0011001; // 4
+                4'h5:   seg = 7'b0010010; // 5
+                4'h6:   seg = 7'b0000010; // 6
+                4'h7:   seg = 7'b1111000; // 7
+                4'h8:   seg = 7'b0000000; // 8
+                4'h9:   seg = 7'b0010000; // 9
+                4'hA:   seg = 7'b0001000; // A
+                4'hB:   seg = 7'b0000011; // B
+                4'hC:   seg = 7'b0100111; // C
+                4'hD:   seg = 7'b0100001; // D
+                4'hE:   seg = 7'b0000110; // E
+                4'hF:   seg = 7'b0001110; // F
                 default: seg = 7'b0111111; // -
            endcase
        end
-
-    
-    always_comb begin
-        
-        if(InstrF == 32'h00000fef) begin        // Indicates that program is finished
-            LED <= 16'hFFFF;
-        end
-        else begin
-            LED <= 16'h0000;
-        end
-        
-    end
     
 // -------------- SKYLARK-V CORE -------------- //
 
@@ -180,25 +181,9 @@ module soc(
             memory[i]   <= 32'h00000013;
         end
         
-        // Manually assign each line of instruction memory
-        memory[0]       <= 32'h00f00093;
-        memory[1]       <= 32'h00110113;
-        memory[2]       <= 32'h00202023;
-        memory[3]       <= 32'hfe209ce3;
-        memory[4]       <= 32'h00000113;
-        memory[5]       <= 32'h00110113;
-        memory[6]       <= 32'h002020a3;
-        memory[7]       <= 32'hfe209ce3;
-        memory[8]       <= 32'h00000113;
-        memory[9]       <= 32'h00110113;
-        memory[10]      <= 32'h00202123;
-        memory[11]      <= 32'hfe209ce3;
-        memory[12]      <= 32'h00000113;
-        memory[13]      <= 32'h00110113;
-        memory[14]      <= 32'h002021a3;
-        memory[15]      <= 32'hfe209ce3;
-        memory[16]      <= 32'h00000113;
-        memory[17]      <= 32'h0000006f;
+        // Load instruction memory
+        $readmemh("C:/Users/willa/skylark-v/user_data/mountains_RV32I.dat", memory);
+        
 
     end
     

@@ -9,11 +9,9 @@ module datapath(
     // Inputs from internal sources (from control)
     input logic                 RegWE_E_E,              // Execute Register Write Enable                (Execute)
                                 RegWE_W_W,              // Writeback Register Write Enable              (Writeback)
-                                OpBSrcE,                // Select ALU operand B source                  (Execute)
-                                en_threshold_E,         // Enable activation threshold (BNN unit)       (Execute)
-                                en_threshold_W,         //                                              (Writeback)
+                                OpBSrcE,                // Select ALU operand B source                  (Execute)                                      (Writeback)
                                 ms_WE_E,                // Write enable matrix_size (BNN unit)          (Execute)
-                                at_WE_E,                // Write enable Activation Threshold            (Execute)
+                                use_register,           // Selects RD1_D as the base address            (Decode)
     input logic [1:0]           PCSrcE,                 // Selects branch target address or +4          (Execute)
     input logic                 StallF,                 // Stalls the pipeline                          (Fetch)
                                 StallD,                 // Stalls the pipeline                          (Decode)
@@ -30,12 +28,13 @@ module datapath(
                                 ALUFuncE,               // Controls the ALU's operation                 (Execute)
     
     // Outputs to external devices
-    output logic [31:0]         ALUResultW, WD, PCF,
+    output logic [31:0]         ALUResultW, WD, PCF, BNNResultW2,
     
     // Outputs to internal devices (to control)
     output logic                RegWE_W_W2,             // Load Stall Buffer
                                 Z,
                                 N,
+    output logic [1:0]          ExPathW2,               //                                              (Writeback 2)
     output logic [4:0]          A1_E, A2_E,             // Source registers (for HCU)                   (Execute)
                                 A3_W,                   // Destination registers (for HCU)              (Writeback)
                                 A4_W2
@@ -138,8 +137,10 @@ module datapath(
 // -------------- ADDRESS GENERATION UNIT -------------- //
     
     agu agu(
+        use_register,
         ExtImmD,
         PCD,
+        RD1_D,
         TargetAddr
     );
 
@@ -181,18 +182,20 @@ module datapath(
     
     logic [31:0]    ReadData2;
 
-    mux3to1 fwd_mux_a(
+    mux4to1 fwd_mux_a(
         RD1_E,                      // a
         ALUResultW,                 // b
         ReadData2,                  // c            // Output from Load Stall Buffer
+        BNNResultW2,                // d            // Output from Load Stall Buffer also
         fwdA_E,                     // sel
         OpA_E                       // y
     );
     
-    mux3to1 fwd_mux_b(
+    mux4to1 fwd_mux_b(
         RD2_E,                      // a
         ALUResultW,                 // b
         ReadData2,                  // c            // Output from Load Stall Buffer
+        BNNResultW2,                // d            // Output from Load Stall Buffer also
         fwdB_E,                     // sel
         OpB_E                       // y
     );
@@ -221,12 +224,12 @@ module datapath(
     logic [2:0]     popcnt_lvl2_E[7:0], popcnt_lvl2_W[7:0];     // Popcount levels 1 & 2 are computed in the Execute stage
     logic [31:0]    BNNResult;
     
+    //assign BNNResult = '0;
+    //assign popcnt_lvl2_E = '0;
+    
     bnn bnn(
         clk, reset,                 // Inputs
-        en_threshold_E,
-        en_threshold_W,
         ms_WE_E,
-        at_WE_E,
         ExtImmE,
         ALUResultE,
         popcnt_lvl2_W,
@@ -240,9 +243,9 @@ module datapath(
     assign WD3      =   ExResultE;
 
     mux3to1 path_select(
-        ALUResultE,                              // ALU path result
-        BNNResult,                              // BNN path result
-        PCNextE,                                // JAL path result
+        ALUResultE,                             // ALU path result
+        BNNResult,                              // BNN path result - NO LONGER USED
+        PCNextE,                                // JAL/JALR path result
         ExPathE,                                // 2-bit signal selects between the above options
         ExResultE                               // Selected value, to be written to register file
     );
@@ -286,11 +289,15 @@ module datapath(
         clk,
         reset,
         RegWE_W_W,
+        ExPathW,
         A4_W,
         ReadData,
+        BNNResult,
         RegWE_W_W2,
+        ExPathW2,
         A4_W2,
-        ReadData2
+        ReadData2,
+        BNNResultW2
     );
 
 endmodule

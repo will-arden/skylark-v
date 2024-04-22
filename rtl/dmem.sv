@@ -24,15 +24,15 @@ module dmem #(
             end
             
             // Add any custom data on initialization
-            data[8]     = 32'h00023BFF;                     // Mountain Definition
-            data[9]     = 32'h000239DF;                     // mnt_test_A
-            data[10]    = 32'h000231DF;                     // mnt_test_B
-            data[11]    = 32'h000011DF;                     // mnt_test_C
-            data[12]    = 32'h000211CF;                     // mnt_test_D
-            data[13]    = 32'h01F71000;                     // false_test_A
-            data[14]    = 32'h01101011;                     // false_test_B
-            data[15]    = 32'h01FFB880;                     // false_test_C
-            data[16]    = 32'h01FFFFFF;                     // false_test_D
+            data[0]     = 32'h00023BFF;                     // Mountain Definition
+            data[1]     = 32'h000239DF;                     // mnt_test_A
+            data[2]    = 32'h000231DF;                     // mnt_test_B
+            data[3]    = 32'h000011DF;                     // mnt_test_C
+            data[4]    = 32'h000211CF;                     // mnt_test_D
+            data[5]    = 32'h01F71000;                     // false_test_A
+            data[6]    = 32'h01101011;                     // false_test_B
+            data[7]    = 32'h01FFB880;                     // false_test_C
+            data[8]    = 32'h01FFFFFF;                     // false_test_D
             
         end
         

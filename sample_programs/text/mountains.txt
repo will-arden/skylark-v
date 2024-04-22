@@ -1,0 +1,34 @@
+_reset:
+  jal x0, main				/* Jump to main() */
+  
+/* -------------- FUNCTION TABLE -------------- */
+
+nextImg:
+  lw x12, 0(x10)			/* Load the nth image */
+  bcnv x13, x12, x11
+  bge x13, x9, activate			/* Compare against threshold */
+  addi x14, x0, 0				/* Deactivate */
+  jal x0, nextImg_ret				/* Leap-frog over */
+activate:
+  addi x14, x0, 1				/* Activate */
+  sw x10, 0(x8)					/* Store index of positive results */
+  addi x8, x8, 1				/* Increment pointer */
+nextImg_ret:
+  jalr x0, x1, 0			/* Function return */
+
+/* -------------- MAIN PROGRAM -------------- */
+main:
+  addi x8, x0, 15			/* Pointer to positive results */
+  addi x9, x0, 0xF			/* Set activation threshold */
+  bnncms 25
+  addi x10, x0, 8			/* Initialize the counter */
+  lw x11, 0(x0)				/* Load mountain definition */
+loop:
+  jal x1, nextImg			/* Process next image */
+  addi x10, x10, -1			/* Decrement loop counter */
+  beq x0, x10, terminate		/* Terminate if done */
+  jal x0, loop				/* Otherwise, loop again */
+
+terminate:				/* Sit in endless loop */
+  jal x0, terminate
+  

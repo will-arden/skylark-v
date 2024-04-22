@@ -1,0 +1,16 @@
+start:
+  jal x0, myprogram
+
+myfunc:
+  slli x5, x5, 1		/* Multiply by 2 */
+  addi x5, x5, 1		/* Add 1 */
+  jalr x2, x1, 0		/* Return */
+
+myprogram:
+  addi x5, x0, 5
+  nop
+  nop
+  jal x1, myfunc		/* Function Call */
+
+terminate:
+  jal x0, terminate

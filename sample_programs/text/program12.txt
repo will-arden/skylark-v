@@ -1,0 +1,26 @@
+_reset:
+  jal x0, main			/* Jump to main() */
+  
+/* -------------- FUNCTION TABLE -------------- */
+
+/*
+  Function to compute the next "batch" of inputs/weights
+  Uses: x2, x23, x24, x25, x26
+*/
+compBatch32:
+  addi x2, x0, 0		/* Initialize iterator */
+  addi x23, x0, 0		/* Initialize running sum */
+  lw x25, 0(x2)			/* Load the next inputs */
+  lw x26, 32(x2)		/* Load the next weights */
+  bcnv x24, x25, x26		/* Convolve matrices */
+  add x23, x23, x24		/* Add to running sum */
+  ret				/* Function return */
+  
+/* -------------- MAIN PROGRAM -------------- */
+main:
+  addi x30, x0, 24		/* Prepare "batch" counter */
+  bnncms 32			/* Prepare the matrix size */
+  jal x1, compBatch32		/* Function call */
+
+terminate:
+  jal x0, terminate

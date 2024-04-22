@@ -1,0 +1,86 @@
+lw x1, 8(x0)
+lw x2, 9(x0)
+bnncms #25
+addi x30, x0, #15
+
+/* bnn x3, x1, x2 */
+bcnv_A:
+  bcnv x3, x1, x2			/* Compute convolution */
+  bge x3, x30, activate_A		/* Branch if activated */
+  addi x3, x0, #0			/* Otherwise, write 0 */
+  jal x0, bcnv_B			/* and jump to the next computation */
+activate_A:
+  addi x3, x0, #1			/* Write a 1 if it should be activated */
+
+bcnv_B:
+  lw x2, 10(x0)
+/* bnn x4, x1, x2 */
+  bcnv x4, x1, x2			/* Compute convolution */
+  bge x4, x30, activate_B		/* Branch if activated */
+  addi x4, x0, #0			/* Otherwise, write 0 */
+  jal x0, bcnv_C			/* and jump to the next computation */
+activate_B:
+  addi x4, x0, #1			/* Write a 1 if it should be activated */
+  
+bcnv_C:
+  lw x2, 11(x0)
+/* bnn x5, x1, x2 */
+  bcnv x5, x1, x2			/* Compute convolution */
+  bge x5, x30, activate_C		/* Branch if activated */
+  addi x5, x0, #0			/* Otherwise, write 0 */
+  jal x0, bcnv_D			/* and jump to the next computation */
+activate_C:
+  addi x5, x0, #1			/* Write a 1 if it should be activated */
+
+bcnv_D:
+  lw x2, 12(x0)
+/* bnn x6, x1, x2 */
+  bcnv x6, x1, x2			/* Compute convolution */
+  bge x6, x30, activate_D		/* Branch if activated */
+  addi x6, x0, #0			/* Otherwise, write 0 */
+  jal x0, bcnv_E			/* and jump to the next computation */
+activate_D:
+  addi x6, x0, #1			/* Write a 1 if it should be activated */
+
+bcnv_E:
+  lw x2, 13(x0)
+/* bnn x20, x1, x2 */
+  bcnv x20, x1, x2			/* Compute convolution */
+  bge x20, x30, activate_E		/* Branch if activated */
+  addi x20, x0, #0			/* Otherwise, write 0 */
+  jal x0, bcnv_F			/* and jump to the next computation */
+activate_E:
+  addi x20, x0, #1			/* Write a 1 if it should be activated */
+
+bcnv_F:
+  lw x2, 14(x0)
+/* bnn x21, x1, x2 */
+  bcnv x21, x1, x2			/* Compute convolution */
+  bge x21, x30, activate_F		/* Branch if activated */
+  addi x21, x0, #0			/* Otherwise, write 0 */
+  jal x0, bcnv_G			/* and jump to the next computation */
+activate_F:
+  addi x21, x0, #1			/* Write a 1 if it should be activated */
+
+bcnv_G:
+  lw x2, 15(x0)
+/* bnn x22, x1, x2 */
+  bcnv x22, x1, x2			/* Compute convolution */
+  bge x22, x30, activate_G		/* Branch if activated */
+  addi x22, x0, #0			/* Otherwise, write 0 */
+  jal x0, bcnv_H			/* and jump to the next computation */
+activate_G:
+  addi x22, x0, #1			/* Write a 1 if it should be activated */
+
+bcnv_H:
+  lw x2, 16(x0)
+/* bnn x23, x1, x2 */
+  bcnv x23, x1, x2			/* Compute convolution */
+  bge x23, x30, activate_H		/* Branch if activated */
+  addi x23, x0, #0			/* Otherwise, write 0 */
+  jal x0, terminate			/* and terminate the program */
+activate_H:
+  addi x23, x0, #1			/* Write a 1 if it should be activated */
+
+terminate:
+  jal x31, terminate
