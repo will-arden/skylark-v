@@ -3,10 +3,7 @@
 module bnn(
 
     input logic                 clk, reset,
-                                en_threshold_E,     // Enables activation threshold logic       (Execute)
-                                en_threshold_W,     //                                          (Writeback)
                                 ms_WE,              // Write Enable for matrix_size register
-                                at_WE,              // Write Enable for activation_threshold register
     input logic signed [31:0]   ExtImmE,            // Write Data
     input logic [31:0]          ALUResultE,         // XOR result
     input logic [2:0]           popcnt_lvl2_W[7:0],
@@ -17,20 +14,15 @@ module bnn(
 
 // -------------- BNN CONTROL LOGIC -------------- //
 
-    // Create control registers
+    // Create control register(s)
     logic           [31:0] matrix_size;
-    logic signed    [31:0] activation_threshold;
 
     // Write to matrix_size
-    always_ff @(posedge clk, posedge reset) begin : seq_proc
-        if(reset) begin
-            matrix_size             <= 32'h00000009;    // 3x3 matrix size by default
-            activation_threshold    <= 32'h00000000;    // Activation threshold of 0 by default
-        end
-        else begin
+    always_ff @(posedge clk, posedge reset) begin : ms_write
+        if(reset)
+            matrix_size             <= 32'h00000009;                // 3x3 matrix size by default
+        else
             if(ms_WE)       matrix_size             <= ExtImmE;     // BNNCMS instruction is I-type
-            else if(at_WE)  activation_threshold    <= ExtImmE;     // BNNCAT instruction is I-type
-        end
     end
     
 // -------------- PREPARING POPCOUNT INPUT -------------- //
@@ -99,17 +91,10 @@ module bnn(
     
     // Fifth and final layer of popcount operation
     assign popcnt_result = {{1'b0}, popcnt_lvl4_W[0]} + {{1'b0}, popcnt_lvl4_W[1]};     // Max value: 6'b100000 (32)
+    
+// -------------- CONVOLUTION RESULT -------------- //
 
-    
-// -------------- ACTIVATION THRESHOLD -------------- //
-    logic           [31:0]  activation;
-    logic signed    [31:0]  popcnt_shifted;
-    
-    assign popcnt_shifted       = (popcnt_result << 1) - matrix_size;   // 2*popcount - matrix_size
-    assign activation           = (popcnt_shifted >= activation_threshold) ? 32'h00000001 : 32'h00000000;
-    
-    // Produce final output depending on the threshold enable
-    assign BNNResult = (en_threshold_W) ? activation : popcnt_shifted;
+    assign BNNResult = (popcnt_result << 1) - matrix_size;      // Convolution Result = (2*popcount) - matrix_size
 
 endmodule
 

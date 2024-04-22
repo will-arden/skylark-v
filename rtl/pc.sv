@@ -19,7 +19,7 @@ module pc(
        end
         else if(!StallF) begin                              // Unless the pipeline is stalled
             if(PCSrc==2'b01) begin                              // If branch predicted,
-                PCF             <= TargetAddr;                      // update the PC and
+                PCF             <= TargetAddr;                      // update the PC
             end
             else if(PCSrc==2'b10) begin                         // If a previous branch instruction was mispredicted,
                 PCF             <= PCNextE;                         // get the correct PC value from the Execute stage and

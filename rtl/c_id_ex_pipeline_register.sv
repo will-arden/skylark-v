@@ -8,9 +8,7 @@ module c_id_ex_pipeline_register(
                             RegWE_E_D, RegWE_W_D,
                             OpBSrcD,
                             MemWriteD,
-                            en_threshold_D,
                             ms_WE_D,
-                            at_WE_D,
                             branch_D, jump_D,
     input logic [1:0]       ExPathD,
     input logic [2:0]       ALUFuncD,
@@ -19,9 +17,7 @@ module c_id_ex_pipeline_register(
     output logic            RegWE_E_E, RegWE_W_E,
                             OpBSrcE,
                             MemWriteE,
-                            en_threshold_E,
                             ms_WE_E,
-                            at_WE_E,
                             branch_E, jump_E,
     output logic [1:0]      ExPathE,
     output logic [2:0]      ALUFuncE,
@@ -34,9 +30,7 @@ module c_id_ex_pipeline_register(
             RegWE_W_E           <= 1'b0;
             OpBSrcE             <= 1'b1;          // Set for NOP
             MemWriteE           <= 1'b0;
-            en_threshold_E      <= 1'b0;
             ms_WE_E             <= 1'b0;
-            at_WE_E             <= 1'b0;
             branch_E            <= 1'b0;
             jump_E              <= 1'b0;
             ExPathE             <= 2'b00;
@@ -49,9 +43,7 @@ module c_id_ex_pipeline_register(
                 RegWE_W_E           <= 1'b0;
                 OpBSrcE             <= 1'b1;          // Set for NOP
                 MemWriteE           <= 1'b0;
-                en_threshold_E      <= 1'b0;
                 ms_WE_E             <= 1'b0;
-                at_WE_E             <= 1'b0;
                 branch_E            <= 1'b0;
                 jump_E              <= 1'b0;
                 ExPathE             <= 2'b00;
@@ -63,9 +55,7 @@ module c_id_ex_pipeline_register(
                 RegWE_W_E           <= RegWE_W_D;
                 OpBSrcE             <= OpBSrcD;
                 MemWriteE           <= MemWriteD;
-                en_threshold_E      <= en_threshold_D;
                 ms_WE_E             <= ms_WE_D;
-                at_WE_E             <= at_WE_D;
                 branch_E            <= branch_D;
                 jump_E              <= jump_D;
                 ExPathE             <= ExPathD;

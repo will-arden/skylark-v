@@ -9,11 +9,6 @@ module c_if_id_pipeline_register(
     input logic                 funct7b5_F,
     input logic [2:0]           funct3_F,
     input logic [6:0]           op_F,
-                                
-                                
-        // I HAVE NOT INCLUDED RS1 & RS2 - these will be included in the control pipeline register
-        // also haven't included any control signals (besides StallE) because they should be passed to the datapath by
-        // the control pipeline register(s)
 
     output logic                funct7b5_D,
     output logic [2:0]          funct3_D,
